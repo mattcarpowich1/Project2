@@ -127,7 +127,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       defaultValue: "Synth"
     },
-    key: {
+    key_note: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
