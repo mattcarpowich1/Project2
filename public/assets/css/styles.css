@@ -1,7 +1,3 @@
-h2 {
-	color: red;
-}
-
 .step {
 	width: 25px;
 	height: 25px;
@@ -36,7 +32,7 @@ h2 {
   height: 60px;
   cursor: pointer;
   color: black;
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .step-modal:hover {
@@ -49,6 +45,18 @@ h2 {
 
 .clicked {
 	border: solid 3px red;
+}
+
+.step-selector {
+	cursor: pointer;
+}
+
+.step-selector:hover {
+	background-color: gold;
+}
+
+.picked {
+	background-color: red;
 }
 
 .searcher {
@@ -229,10 +237,6 @@ article:hover {
 #percussion-div {
 	padding-left: 12px;
 	padding-right: 12px;
-}
-
-.percussion-btn {
-	margin: auto !important;
 }
 
 .percussion-icon {
