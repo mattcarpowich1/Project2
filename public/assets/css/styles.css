@@ -1,0 +1,266 @@
+h2 {
+	color: red;
+}
+
+.step {
+	width: 25px;
+	height: 25px;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+  justify-content: center;
+}
+
+.step-text {
+  flex: 1;
+  text-align: center;
+  font-size: 25px;
+  color: white;
+  line-height: 60px;
+}
+
+.step-grey{
+	background: grey;
+}
+
+.step-blue{
+	background: blue;
+}
+
+.step-modal {
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  color: black;
+  font-size: 30px;
+}
+
+.step-modal:hover {
+	background-color: gold;
+}
+
+.unclicked {
+	border: none;
+}
+
+.clicked {
+	border: solid 3px red;
+}
+
+.searcher {
+	margin-top: -32px;
+}
+
+.half-searcher {
+	padding: 8px 24px 0 24px;
+}
+
+.input-searcher {
+	width: 100%;
+}
+
+article {
+  cursor: pointer;
+  position: relative;
+}
+
+article:hover {
+	background-color: lightblue;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: lightgrey;
+  z-index: 3;
+  opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.overlay-text {
+	text-align: center;
+	font-size: 100px;
+}
+
+.session {
+	visibility: hidden;
+}
+
+.modal-card-head {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.input-modal {
+  flex: 1;
+}
+
+.modal-footer-icons {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.control-row {
+	margin: 20px 0 25px 0;
+	position: relative;
+}
+
+.modal-control-row {
+	margin: 20px 0 25px 0;
+	padding-bottom: 20px;
+	position: relative;
+}
+
+.modal-control-bar {
+	position: absolute;
+	top: 20%;
+	left: 0;
+	width: 100%;
+	margin-bottom: 0 !important;
+}
+
+.control-bar {
+	position: absolute;
+	top: 27%;
+	left: 0;
+	width: 100%;
+	margin-bottom: 0 !important;
+}
+
+.control-play {
+  width: 50px;
+	height: 50px;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	background: white;
+	margin: auto;
+	z-index: 2;
+	box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+	justify-content: center;
+}
+
+.modal-control-play {
+  width: 50px;
+	height: 50px;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	background: white;
+	margin: auto;
+	z-index: 100;
+	box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+	justify-content: center;
+}
+
+.play-div {
+	margin: auto;
+}
+
+.fa-play {
+	font-size: 30px;
+	text-align: center;
+	line-height: 50px;
+	padding-left: 5px;
+}
+
+.status-bar {
+	display: flex;
+	justify-content: flex-end;
+	margin: -10px -10px 0 0;
+}
+
+.favorite {
+	font-size: 20px;
+}
+
+.fa-star-o {
+	color: lightgrey;
+}
+
+.fa-star {
+	color: gold;
+}
+
+.favorite:hover {
+	color: gold;
+	cursor: pointer;
+}
+
+.favorite-modal {
+	font-size: 40px;
+	margin-right: 15px;
+}
+
+.fa-trash-o {
+	font-size: 30px;
+	color: lightgrey;
+}
+
+.fa-trash-o:hover {
+	color: red;
+	cursor: pointer;
+}
+
+.step-note:hover {
+  background-color: lightblue;
+}
+
+#modal-key-table {
+  margin-bottom: 13px;
+}
+
+.modal-key-table-head {
+	padding-top: 0px !important;
+}
+
+#percussion-div {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.percussion-btn {
+	margin: auto !important;
+}
+
+.percussion-icon {
+	width: 15px;
+	height: 15px;
+}
+
+/*Navbar*/
+@media only screen and (max-width: 1024px) {
+	.navbar {
+		display: flex !important;
+		flex-direction: column !important;
+	}
+
+	.navbar-start {
+		margin: auto !important;
+	}
+
+	#input-searcher-div {
+		flex: 1 !important;
+	}
+
+	#input-searcher {
+		width: 100% !important;
+	}
+
+	.step {
+		width: 40px;
+		height: 40px;
+	}
+}
