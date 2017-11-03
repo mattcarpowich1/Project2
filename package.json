@@ -4,7 +4,8 @@
   "description": "An E-Commerce Store Front",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mysql": "mysql -h 127.0.0.1 -uroot < ./sequel/seeds.sql"
   },
   "repository": {
     "type": "git",

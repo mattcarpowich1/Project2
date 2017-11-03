@@ -1,3 +1,5 @@
+USE `sequencer_db`;
+
 INSERT INTO Riffs (title, sequence, tempo, beat_division, num_steps, theme, sound, key_note, num_voices, num_favorites, play_count, createdAt, updatedAt)
 VALUES (
 	"Song 2",
