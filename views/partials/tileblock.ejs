@@ -1,3 +1,4 @@
+<% for (var i = 0; i < riffs.length; i++) { %>
 <div class="column is-mobile is-half-tablet is-one-quarter-desktop">
   <div class="tile is-parent">
     <article class="tile is-child box">
@@ -8,7 +9,7 @@
       	<div class="status-bar">
       		<i class="fa fa-star-o favorite" id="favorite" aria-hidden="true"></i>
       	</div>
-        <p class="title">{{title}}</p>
+        <p class="title"><%= riffs[i].title %></p>
         <div class="columns is-flex">
           <div class="column is-3">
             <div class="step step-grey"></div>
@@ -75,3 +76,4 @@
     </article>
   </div>
 </div>
+<% } %>

@@ -1,7 +1,7 @@
 <nav class="navbar is-black">
   <div class="navbar-brand navbar-start">
     <a class="navbar-item brand-text navbar-start" href="">
-      PROJECT NAME          
+      PROJECT NAME
     </a>
   </div>
 
@@ -34,11 +34,7 @@
 
 <div class="section">
   <div class="columns is-gapless is-multiline">
-
-  {{#each riffs}}
-    {{> tiles/tiles-block}}
-  {{/each}}
-
+    <% include ../partials/tileblock %>
   </div>
 </div>
 
@@ -92,7 +88,7 @@
                     <input type="checkbox" id="C-s-check">
                   </label>
                 </td>
-                
+
               </tr>
 
               <tr>

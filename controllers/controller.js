@@ -1,4 +1,5 @@
 let express = require("express");
+let request = require("request");
 
 let router = express.Router();
 let db = require("../models");
@@ -13,7 +14,9 @@ let db = require("../models");
  * @param  {[type]} res [HTTP Response, renders index.handlebars]
  */
 router.get("/", function(req, res) {
-  res.render("index");
+  db.Riffs.findAll({}).then(function(allRiffs) {
+    res.render("pages/index", {riffs: allRiffs});
+  });
 });
 
 /**
@@ -51,10 +54,12 @@ router.get("/api/riffs/:id", function(req, res) {
  * @param  {Object} req [HTTP Request, contains riff object in post body]
  * @param  {Object} res [HTTP Response, returns new entry as JSON upon successful query]
  */
-router.post("/riffs/new", function(req, res) {
-  db.Riffs.create(req.body).then(function(newRiff) {
-    res.json(newRiff);
-  });
+router.post("/api/riffs/new", function(req, res) {
+  let j = JSON.stringify(req.body, 2, null);
+  console.log(j);
+  // db.Riffs.create(req.body).then(function(newRiff) {
+  //   res.json(newRiff);
+  // });
 });
 
 module.exports = router;

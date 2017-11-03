@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
             return true;
           }
         },
-        // custom validation to ensure that the value is a 
+        // custom validation to ensure that the value is a
         // string representation of an array
         isStringifiedArray: function(value) {
           try {
@@ -46,8 +46,8 @@ module.exports = function(sequelize, DataTypes) {
       validate: {
         len: [2, 3],
         // minimum of 10 bpm and maximum of 300bpm
-        min: 10, 
-        max: 300, 
+        min: 10,
+        max: 300,
         // custom validation that ensures value is numeric
         // (string representations of numbers can be inputted
         // otherwise, which could cause bugs)
@@ -134,7 +134,7 @@ module.exports = function(sequelize, DataTypes) {
         len: [1],
         // must be one of the following values
         isIn: [["C", "C#", "D", "D#",
-                "E", "F", "F#", "G", 
+                "E", "F", "F#", "G",
                 "G#", "A", "A#", "B"]]
       },
       defaultValue: "C"
