@@ -7,6 +7,9 @@ $.ajax({
 
 StartAudioContext(Tone.context, "article").then(function() {
 
+  var loop;
+  var currentSequence;
+
   //opens modal when click on tile
   $('article').on('click', function (evt) {
     if (evt.target.id === 'favorite') return;
@@ -20,15 +23,26 @@ StartAudioContext(Tone.context, "article").then(function() {
       method: "GET"
     }).done(function(riff) {
       // set tempo to riff's tempo
-      Tone.Transport.bpm.value = riff.tempo;
+      Tone.Transport.bpm.value = 120;
 
       Tone.Transport.start();
 
-      var sequence = riff.sequence.split(",");
+      // var sequence = riff.sequence.split(",");
+
+      var sequence = ["A2", "B2", "C#3", "D#3",
+                  "F3", "G3", "A3", "B3",
+                  "A3", "G3", "F3", "D#3",
+                  "C#3", "B2", "A2", "G2"];
+
+      currentSequence = sequence;
+
+      $.each($('.modal-step'), function(index, value) {
+        $(this).text(sequence[index]);
+      });
 
       // sequence = sequence[0].slice(1);
 
-      console.log(sequence);
+      // console.log(sequence);
 
       // keep track of which step in the sequence we're on
       var step = 0;
@@ -37,19 +51,18 @@ StartAudioContext(Tone.context, "article").then(function() {
       var synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
 
       // initialize loop with parameters from riff
-      var loop = new Tone.Loop(function(time) {
+      loop = new Tone.Loop(function(time) {
         if (step > sequence.length) {
           step = 0;
         }
 
         if (sequence[step]) {
-          console.log(sequence);
           synth.triggerAttackRelease(sequence[step], "8n", time);
         }
 
         step++;
 
-      }, "8n");
+      }, "16n");
 
       $("#cn-button").on("click", function(event) {
         loop.start();
@@ -64,12 +77,14 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('.close-modal').on('click', function () {
     $('.modal').removeClass('is-active');
     clearModal();
+    loop.stop();
   });
 
   //closes modal if clicking off of modal
   $('.modal-background').on('click', function () {
     $('.modal').removeClass('is-active');
     clearModal();
+    loop.stop();
   });
 
   //clear step when modal closes
