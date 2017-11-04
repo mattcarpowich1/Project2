@@ -1,6 +1,6 @@
 let express = require("express");
 let bodyParser = require("body-parser");
-let dbu = require("./users");
+let dbu = require("./auth");
 let db = require("./models");
 let passport = require("passport");
 
