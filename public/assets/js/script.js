@@ -27,22 +27,14 @@ StartAudioContext(Tone.context, "article").then(function() {
 
       Tone.Transport.start();
 
-      // var sequence = riff.sequence.split(",");
-
-      var sequence = ["A2", "B2", "C#3", "D#3",
-                  "F3", "G3", "A3", "B3",
-                  "A3", "G3", "F3", "D#3",
-                  "C#3", "B2", "A2", "G2"];
-
-      currentSequence = sequence;
-
       $.each($('.modal-step'), function(index, value) {
         $(this).text(sequence[index]);
       });
 
-      // sequence = sequence[0].slice(1);
+      //get step array
+      var sequence = getStepArray(riff.sequence);
+      console.log(sequence);
 
-      // console.log(sequence);
 
       // keep track of which step in the sequence we're on
       var step = 0;
@@ -72,6 +64,18 @@ StartAudioContext(Tone.context, "article").then(function() {
 
 
   });
+
+  function getStepArray (dbString) {
+    let seq = dbString.split(", ");
+
+    seq[0] = seq[0].slice(1);
+    seq[seq.length-1] = seq[seq.length-1].slice(0, -1);
+    seq.forEach((el, i) => {
+      seq[i] = el.slice(1,-1);
+    });
+
+    return seq;
+  }
 
   //closes modal if clicking elements that have class 
   $('.close-modal').on('click', function () {
