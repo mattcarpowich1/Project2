@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [8],
+        len: [4],
         // custom validation to ensure that value is a string
         isValidString: function(value) {
           if (!(typeof value === "string")) {
@@ -62,8 +62,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
-
-  //Users.hasMany(Riffs); 
+  //Users.hasMany(Riffs);
   // RELATIONSHIPS GO here
   // Riff.belongsTo(Author);
 

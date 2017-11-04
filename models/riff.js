@@ -193,7 +193,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   // RELATIONSHIPS GO here
-  // Riff.belongsTo(Author);
+   //Riffs.belongsTo(Users);
 
   return Riffs;
 };
