@@ -63,7 +63,7 @@ StartAudioContext(Tone.context, "article").then(function() {
 
       }, "8n");
 
-      $("#cn-button").on("click", function(event) {
+      $(".is-active #cn-button").on("click", function(event) {
         loop.start();
       });
 
@@ -94,14 +94,6 @@ StartAudioContext(Tone.context, "article").then(function() {
     }
 
     var step = 0;
-
-    var $article = ($(this).parent().parent().parent().parent());
-
-    if ($article.hasClass('is-active')) {
-      return;
-    }
-
-    var id = ($article).id;
 
     for (var i = 0; i < allRiffs.length; i++) {
       if (allRiffs[i].id === id) {
