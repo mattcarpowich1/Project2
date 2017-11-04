@@ -24,10 +24,8 @@ StartAudioContext(Tone.context, "article").then(function() {
 
       Tone.Transport.start();
 
-      var sequence = riff.sequence.split(",");
-
-      // sequence = sequence[0].slice(1);
-
+      //get step array
+      var sequence = getStepArray(riff.sequence);
       console.log(sequence);
 
       // keep track of which step in the sequence we're on
@@ -59,6 +57,18 @@ StartAudioContext(Tone.context, "article").then(function() {
 
 
   });
+
+  function getStepArray (dbString) {
+    let seq = dbString.split(", ");
+
+    seq[0] = seq[0].slice(1);
+    seq[seq.length-1] = seq[seq.length-1].slice(0, -1);
+    seq.forEach((el, i) => {
+      seq[i] = el.slice(1,-1);
+    });
+
+    return seq;
+  }
 
   //closes modal if clicking elements that have class 
   $('.close-modal').on('click', function () {
