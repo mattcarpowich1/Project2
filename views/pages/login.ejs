@@ -23,7 +23,20 @@
             <!-- <img src="https://placehold.it/128x128"> -->
               <div id="avatar-div"></div>
             </figure>
-            <form>
+            <form action="/login" method="post">
+	<div>
+	<label>Username:</label>
+	<input class="input is-large" type="text" name="username"/><br/>
+	</div>
+	<div>
+	<label>Password:</label>
+	<input class="input is-large" type="password" name="password"/>
+	</div>
+	<div>
+	<input class="input is-large" type="submit" value="Submit"/>
+	</div>
+</form>
+            <!-- <form>
               <div class="field">
                 <div class="control">
                   <input class="input is-large" id="username" type="text" placeholder="Username" autofocus="">
@@ -42,7 +55,7 @@
                 </label>
               </div>
               <a class="button is-block is-info is-large">Login</a>
-            </form>
+            </form> -->
           </div>
           <p class="has-text-grey">
             <a href="/user">Sign Up</a>
