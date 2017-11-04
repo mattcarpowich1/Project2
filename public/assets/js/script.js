@@ -1,7 +1,15 @@
+$.ajax({
+  url: '/api/riffs/all',
+  method: "GET"
+}).done(function(riffs) {
+  console.log(riffs);
+})
+
 //opens modal when click on tile
 $('article').on('click', function (evt) {
   if (evt.target.id === 'favorite') return;
   $('.modal').addClass('is-active');
+  console.log($(this));
 });
 
 //closes modal if clicking elements that have class 
