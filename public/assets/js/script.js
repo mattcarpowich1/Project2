@@ -27,14 +27,14 @@ StartAudioContext(Tone.context, "article").then(function() {
 
       Tone.Transport.start();
 
+      //get step array
+      var sequence = getStepArray(riff.sequence);
+      
       $.each($('.modal-step'), function(index, value) {
         $(this).text(sequence[index]);
       });
 
-      //get step array
-      var sequence = getStepArray(riff.sequence);
       console.log(sequence);
-
 
       // keep track of which step in the sequence we're on
       var step = 0;
@@ -44,17 +44,17 @@ StartAudioContext(Tone.context, "article").then(function() {
 
       // initialize loop with parameters from riff
       loop = new Tone.Loop(function(time) {
-        if (step > sequence.length) {
+        if (step >= sequence.length) {
           step = 0;
         }
 
-        if (sequence[step]) {
+        if (sequence[step] != " ") {
           synth.triggerAttackRelease(sequence[step], "8n", time);
         }
 
         step++;
 
-      }, "16n");
+      }, "8n");
 
       $("#cn-button").on("click", function(event) {
         loop.start();
