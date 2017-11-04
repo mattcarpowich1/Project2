@@ -1,26 +1,65 @@
-let express = require("express");
-let bodyParser = require("body-parser");
+let express = require('express');
+let bodyParser = require('body-parser');
+let passport = require('passport');
+let Strategy = require('passport-local').Strategy;
+let dbu = require('./users');
 
 let PORT = process.env.PORT || 3000;
+
+passport.use(new Strategy(
+  function (username, password, cb) {
+    dbu.users.findByUsername(username, function (err, user) {
+      if (err) { return cb(err); }
+      if (!user) { return cb(null, false); }
+      if (user.password !== password) { return cb(null, false); }
+      return cb(null, user);
+    });
+  }));
+
+// Configure Passport authenticated session persistence.
+//
+// In order to restore authentication state across HTTP requests, Passport needs
+// to serialize users into and deserialize users out of the session.  The
+// typical implementation of this is as simple as supplying the user ID when
+// serializing, and querying the user record by ID from the database when
+// deserializing.
+passport.serializeUser(function (user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function (id, cb) {
+  dbu.users.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
+  });
+});
 
 let app = express();
 
 // Requiring our models for syncing
-var db = require("./models");
+var db = require('./models');
 
-// Serve static content for the app from the "public" directory in the application directory.
-app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: false }));
+// Serve static content for the app from the 'public' directory in the application directory.
+app.use(express.static('public'));
+app.use(require('morgan')('combined'));
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 
+// Initialize Passport and restore authentication state, if any, from the
+// session.
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.set("view engine", "ejs");
+app.set('view engine', 'ejs');
 
 // Import routes controller and give the server access to them.
-let routes = require("./controllers/controller.js");
-app.use("/", routes);
+let routes = require('./controllers/controller.js');
+app.use('/', routes);
 
-db.sequelize.sync({ force: true }).then(function() {
-  app.listen(PORT, function() {
-    console.log("App listening on PORT " + PORT);
+
+db.sequelize.sync({ force: true }).then(function () {
+  app.listen(PORT, function () {
+    console.log('App listening on PORT ' + PORT);
   });
 });

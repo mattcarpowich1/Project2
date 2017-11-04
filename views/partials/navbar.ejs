@@ -19,15 +19,25 @@
           </a>
         </div>
       </div>
-
-      <div class="navbar-item">
-        <a class="button is-primary" id="navbar-login-button" href="/login">
-          <span class="icon">
-            <i class="fa fa-user-circle-o"></i>
-          </span>
-          <span>LOGIN</span>
-        </a>
-      </div>
+      <% if (!user) { %>
+        <div class="navbar-item">
+          <a class="button is-primary" id="navbar-login-button" href="/login">
+            <span class="icon">
+              <i class="fa fa-user-circle-o"></i>
+            </span>
+            <span>LOGIN</span>
+          </a>
+        </div>
+      <% } else { %>
+        <div class="navbar-item">
+          <a class="button is-primary" id="navbar-login-button" href="/profile">
+            <span class="icon">
+              <i class="fa fa-user-circle-o"></i>
+            </span>
+            <span>PROFILE</span>
+          </a>
+        </div>
+      <% } %>
     </div>
   </div>
 </nav>
