@@ -1,18 +1,25 @@
+var allRiffs;
+var currentRiff;
+Tone.Transport.start();
+
 $.ajax({
   url: '/api/riffs/all',
   method: "GET"
 }).done(function(riffs) {
-  console.log(riffs);
+  allRiffs = riffs;
 });
 
 StartAudioContext(Tone.context, "article").then(function() {
 
   var loop;
   var currentSequence;
+  var synth;
+  var isPlaying = false;
 
   //opens modal when click on tile
   $('article').on('click', function (evt) {
     if (evt.target.id === 'favorite') return;
+    if (evt.target.className.indexOf('fa') > -1) return;
     $('.modal').addClass('is-active');
     
     var riffId = $(this).data('id');
@@ -25,7 +32,7 @@ StartAudioContext(Tone.context, "article").then(function() {
       // set tempo to riff's tempo
       Tone.Transport.bpm.value = 120;
 
-      Tone.Transport.start();
+      // Tone.Transport.start();
 
       //get step array
       var sequence = getStepArray(riff.sequence);
@@ -40,7 +47,7 @@ StartAudioContext(Tone.context, "article").then(function() {
       var step = 0;
 
       // create instrument
-      var synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
+      synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
 
       // initialize loop with parameters from riff
       loop = new Tone.Loop(function(time) {
@@ -76,6 +83,65 @@ StartAudioContext(Tone.context, "article").then(function() {
 
     return seq;
   }
+
+  // Play the sequence that was clicked
+  $('.fa-play').on('click', function(event) {
+
+    if (isPlaying) {
+      loop.stop();
+      isPlaying = false;
+      return;
+    }
+
+    var step = 0;
+
+    var $article = ($(this).parent().parent().parent().parent());
+
+    if ($article.hasClass('is-active')) {
+      return;
+    }
+
+    var id = ($article).id;
+
+    for (var i = 0; i < allRiffs.length; i++) {
+      if (allRiffs[i].id === id) {
+        currentRiff = allRiffs[i];
+        break;
+      }
+    }
+
+    // set tempo 
+    Tone.Transport.bpm.value = currentRiff.tempo;
+
+    // get sequence and format it
+    currentSequence = getStepArray(currentRiff.sequence);
+
+    // initialize instrument
+    synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
+
+    // initialize loop
+    loop = new Tone.Loop(function(time) {
+      if (step >= currentSequence.length) {
+        step = 0;
+      }
+
+      if (currentSequence[step] != " ") {
+        synth.triggerAttackRelease(currentSequence[step], "8n", time);
+      }
+
+      step++;
+    }, "8n");
+
+
+    Tone.Transport.start();
+    setTimeout(function() {
+      loop.start();
+    }, 3);
+    
+    isPlaying = true;
+
+
+  });
 
   //closes modal if clicking elements that have class 
   $('.close-modal').on('click', function () {
