@@ -183,26 +183,28 @@ StartAudioContext(Tone.context, "article").then(function() {
   //altering to sharps and flats
   $('.mod-check').on('click', function () {
     let key = $(this).attr('id')[0];
-    let mod = $(this).attr('id')[2];
-    let val = `${key}-${mod}`;
+    let mod = $(this).attr('id')[1];
+    let val = `${key}${mod}`;
     let p8 = $(`#${key}-p8-option`).val();
 
     if ($(`#${val}-check`).prop('checked')) {
-      if (mod === 'b') $(`#${key}-s-check`).prop('checked', false);
-      else $(`#${key}-b-check`).prop('checked', false);
+      if (mod === 'b') $(`#${key}s-check`).prop('checked', false);
+      else $(`#${key}b-check`).prop('checked', false);
+
+      if (mod === 's') val = key + '#';
     } else {
       val = key;
     }
 
-    $(`#${key}-step-selector`).attr('value', `${p8}-${val}`);
+    $(`#${key}-step-selector`).attr('value', `${val}${p8}`);
   });
 
   //changing octaves
   $('.p8-option').on('change', function () {
     let p8 = $(this).val();
     let key = $(this).attr('id')[0];
-    let curVal = $(`#${key}-step-selector`).attr('value').slice(1);
-    $(`#${key}-step-selector`).attr('value', p8+curVal);
+    let curVal = $(`#${key}-step-selector`).attr('value').slice(0,-1);
+    $(`#${key}-step-selector`).attr('value', curVal+p8);
   });
 
   //pick which notes are sent to steps
@@ -221,6 +223,7 @@ StartAudioContext(Tone.context, "article").then(function() {
     if ($('#step-grid').find('.clicked').length !== 0) {
       $('.clicked').each(function () {
         $(this).html($(that).attr('value'));
+        $(this).val($(that).attr('value'));
         $(this).removeClass('clicked');
         $(this).addClass('unclicked');
         $(that).removeClass('picked');
@@ -236,6 +239,7 @@ StartAudioContext(Tone.context, "article").then(function() {
 
       if ($('.picked').attr('value') !== undefined) {
         $(this).html($('.picked').attr('value'));
+        $(this).val($('.picked').attr('value'));
         $(this).addClass('unclicked');
         $(this).removeClass('clicked');
       } else {
