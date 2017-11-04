@@ -62,9 +62,16 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
-  //Users.hasMany(Riffs);
-  // RELATIONSHIPS GO here
-  // Riff.belongsTo(Author);
+  Users.associate = function(models) {
+    // Associating Author with Posts
+    // When an Author is deleted, also delete any associated Posts
+    Users.hasMany(models.Riffs, {
+      onDelete: "CASCADE",
+      foreignKey: {
+        allowNull: false
+      }
+    });
+  };
 
   return Users;
 };
