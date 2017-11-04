@@ -1,5 +1,10 @@
 var allRiffs;
 var currentRiff;
+var loop;
+var currentSequence;
+var synth;
+var isPlaying = false;
+
 Tone.Transport.start();
 
 $.ajax({
@@ -10,11 +15,6 @@ $.ajax({
 });
 
 StartAudioContext(Tone.context, "article").then(function() {
-
-  var loop;
-  var currentSequence;
-  var synth;
-  var isPlaying = false;
 
   //opens modal when click on tile
   $('article').on('click', function (evt) {
