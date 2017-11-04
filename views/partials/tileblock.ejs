@@ -1,15 +1,17 @@
-<% for (var i = 0; i < riffs.length; i++) { %>
+<% for (var i = -1; i < riffs.length; i++) { %>
 <div class="column is-mobile is-half-tablet is-one-quarter-desktop">
   <div class="tile is-parent">
     <article class="tile is-child box">
-    	<div class="overlay session">
+    	<div class="overlay <% if (i != -1) { %> is-riff <% } %>">
     		<div class="overlay-text"> + </div>
     	</div>
       <div class="content">
       	<div class="status-bar">
       		<i class="fa fa-star-o favorite" id="favorite" aria-hidden="true"></i>
       	</div>
-        <p class="title"><%= riffs[i].title %></p>
+        <p class="title">
+          <% if (i != -1) { %> <%= riffs[i].title %> <% } else { %> Add Riff <% } %>
+        </p>
         <div class="columns is-flex">
           <div class="column is-3">
             <div class="step step-grey"></div>

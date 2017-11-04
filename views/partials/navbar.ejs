@@ -1,18 +1,18 @@
 <nav class="navbar is-black">
   <div class="navbar-brand navbar-start">
-    <a class="navbar-item brand-text navbar-start" href="/">
+    <a class="navbar-item brand-text navbar-start" id="navbar-logo" href="/">
       PROJECT NAME
     </a>
   </div>
 
   <div class="navbar-end">
     <div class="field is-grouped">
-      <div class="navbar-item" id="input-searcher-div">
+      <div class="navbar-item" id="navbar-input-item">
         <div class="field has-addons">
-          <div class="control" id="input-searcher">
-            <input class="input" type="text" placeholder="Search Riffs..">
+          <div class="control" id="navbar-input-control">
+            <input class="input" type="text" id="navbar-input" placeholder="Search Riffs..">
           </div>
-          <a class="button is-info">
+          <a class="button is-info" id="navbar-input-button">
             <span class="icon">
               <i class="fa fa-search"></i>
             </span>
@@ -21,7 +21,7 @@
       </div>
 
       <div class="navbar-item">
-        <a class="button is-primary" href="/login">
+        <a class="button is-primary" id="navbar-login-button" href="/login">
           <span class="icon">
             <i class="fa fa-user-circle-o"></i>
           </span>
