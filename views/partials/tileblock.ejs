@@ -1,7 +1,7 @@
 <% for (var i = -1; i < riffs.length; i++) { %>
 <div class="column is-mobile is-half-tablet is-one-quarter-desktop">
   <div class="tile is-parent">
-    <article class="tile is-child box">
+    <article class="tile is-child box" data-id="<% if (i != -1) { %><%= riffs[i].id %><% } %>">
     	<div class="overlay <% if (i != -1) { %> is-riff <% } %>">
     		<div class="overlay-text"> + </div>
     	</div>
