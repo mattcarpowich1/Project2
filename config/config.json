@@ -7,15 +7,15 @@
     "dialect": "mysql"
   },
   "test": {
-    "username": "saam",
-    "password": "S@amk1992",
+    "username": "root",
+    "password": "",
     "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
-    "username": "saam",
-    "password": "S@amk1992",
+    "username": "root",
+    "password": "",
     "database": "database_production",
     "host": "127.0.0.1",
     "dialect": "mysql"
