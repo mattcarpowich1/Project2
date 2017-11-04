@@ -20,6 +20,10 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('article').on('click', function (evt) {
     if (evt.target.id === 'favorite') return;
     if (evt.target.className.indexOf('fa') > -1) return;
+    if (loop && isPlaying) {
+      loop.stop();
+      isPlaying = false;
+    }
     $('.modal').addClass('is-active');
     
     var riffId = $(this).data('id');
@@ -63,10 +67,6 @@ StartAudioContext(Tone.context, "article").then(function() {
 
       }, "8n");
 
-      $(".is-active #cn-button").on("click", function(event) {
-        loop.start();
-      });
-
     });
 
 
@@ -84,8 +84,20 @@ StartAudioContext(Tone.context, "article").then(function() {
     return seq;
   }
 
+  $("#cn-button").on("click", function(event) {
+    console.log(isPlaying);
+    if (isPlaying) {
+      isPlaying = false;
+      loop.stop();
+    } else {
+      isPlaying = true;
+      loop.start();
+    }
+  
+  });
+
   // Play the sequence that was clicked
-  $('.fa-play').on('click', function(event) {
+  $('.control-play').on('click', function(event) {
 
     if (isPlaying) {
       loop.stop();
@@ -94,6 +106,8 @@ StartAudioContext(Tone.context, "article").then(function() {
     }
 
     var step = 0;
+
+    var id = $(this).data('id');
 
     for (var i = 0; i < allRiffs.length; i++) {
       if (allRiffs[i].id === id) {
@@ -128,10 +142,8 @@ StartAudioContext(Tone.context, "article").then(function() {
     Tone.Transport.start();
     setTimeout(function() {
       loop.start();
+      isPlaying = true;
     }, 3);
-    
-    isPlaying = true;
-
 
   });
 
@@ -140,6 +152,7 @@ StartAudioContext(Tone.context, "article").then(function() {
     $('.modal').removeClass('is-active');
     clearModal();
     loop.stop();
+    isPlaying = false;
   });
 
   //closes modal if clicking off of modal
@@ -147,6 +160,7 @@ StartAudioContext(Tone.context, "article").then(function() {
     $('.modal').removeClass('is-active');
     clearModal();
     loop.stop();
+    isPlaying = false;
   });
 
   //clear step when modal closes
