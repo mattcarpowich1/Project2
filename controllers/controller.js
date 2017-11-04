@@ -9,13 +9,35 @@ let db = require("../models");
 // =======================================
 
 /**
- * HTML Get Route, Renders index.handlebars
+ * HTML Get Route, Renders index.ejs
  * @param  {[type]} req [HTTP Request]
- * @param  {[type]} res [HTTP Response, renders index.handlebars]
+ * @param  {[type]} res [HTTP Response, renders index.ejs]
  */
 router.get("/", function(req, res) {
   db.Riffs.findAll({}).then(function(allRiffs) {
     res.render("pages/index", {riffs: allRiffs});
+  });
+});
+
+/**
+ * HTML Get Route, Renders login.ejs
+ * @param  {[type]} req [HTTP Request]
+ * @param  {[type]} res [HTTP Response, renders login.ejs]
+ */
+router.get("/login", function(req, res) {
+  db.Riffs.findAll({}).then(function(allRiffs) { //change to users table when available?
+    res.render("pages/login", {riffs: allRiffs});
+  });
+});
+
+/**
+ * HTML Get Route, Renders user.ejs
+ * @param  {[type]} req [HTTP Request]
+ * @param  {[type]} res [HTTP Response, renders user.ejs]
+ */
+router.get("/user", function(req, res) {
+  db.Riffs.findAll({}).then(function(allRiffs) { //change to users table when available
+    res.render("pages/user", {riffs: allRiffs});
   });
 });
 
