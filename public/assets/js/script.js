@@ -1,35 +1,32 @@
-// $(document).ready( function () {
-//   toggleSelectClasses($(window).width());
-// });
-
-// $(window).resize( function () { 
-// 	toggleSelectClasses($(window).width());
-// });
-
-// function toggleSelectClasses (winWidth) {
-//   if (winWidth <= 768) {
-//   	$('#step-selector').prop('multiple', false);
-//   	$('#step-selector').removeAttr('size');
-//   	$('#step-selector-div').removeClass('is-multiple');
-//   } else {
-//   	$('#step-selector').prop('multiple', 'true');
-//   	$('#step-selector').attr('size', '9');
-//    $('#step-selector-div').addClass('is-multiple');
-//   }
-// }
-
+//opens modal when click on tile
 $('article').on('click', function (evt) {
   if (evt.target.id === 'favorite') return;
   $('.modal').addClass('is-active');
 });
 
+//closes modal if clicking elements that have class 
 $('.close-modal').on('click', function () {
   $('.modal').removeClass('is-active');
+  clearModal();
 });
 
+//closes modal if clicking off of modal
 $('.modal-background').on('click', function () {
   $('.modal').removeClass('is-active');
+  clearModal();
 });
+
+//clear step when modal closes
+function clearModal() {
+  $('.modal-step').each(function () {
+    $(this).empty();
+    $(this).addClass('unclicked');
+    $(this).removeClass('clicked');
+  });
+  $('.step-selector').each(function () {
+    $(this).removeClass('picked');
+  });
+}
 
 //toggling favorite star
 $('.favorite').on('click', function () {
@@ -91,7 +88,7 @@ $('.step-selector').on('click', function () {
 });
 
 //steps clicked
-$('.step-modal').on('click', function () {
+$('.modal-step').on('click', function () {
   if ($(this).hasClass('unclicked')) {
     $(this).removeClass('unclicked');
     $(this).addClass('clicked');

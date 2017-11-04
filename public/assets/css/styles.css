@@ -12,27 +12,7 @@ p {
   font-weight: 700;
 }
 
-.step {
-  width: 25px;
-  height: 25px;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.step-text {
-  flex: 1;
-  text-align: center;
-  font-size: 25px;
-  color: white;
-  line-height: 60px;
-}
-
+/****** GENERIC STEP STYLE ******/
 .step-grey{
   background: grey;
 }
@@ -41,50 +21,7 @@ p {
   background: blue;
 }
 
-.step-modal {
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
-  color: black;
-  font-size: 20px;
-}
-
-.step-modal:hover {
-  background-color: gold;
-}
-
-.unclicked {
-  border: none;
-}
-
-.clicked {
-  border: solid 3px red;
-}
-
-.step-selector {
-  cursor: pointer;
-}
-
-.step-selector:hover {
-  background-color: gold;
-}
-
-.picked {
-  background-color: red;
-}
-
-.searcher {
-  margin-top: -32px;
-}
-
-.half-searcher {
-  padding: 8px 24px 0 24px;
-}
-
-.input-searcher {
-  width: 100%;
-}
-
+/****** TILE STYLES ******/
 article {
   cursor: pointer;
   position: relative;
@@ -115,75 +52,20 @@ article:hover {
   font-size: 100px;
 }
 
-.session {
+.is-riff {
   visibility: hidden;
 }
 
-.modal-card-head {
+.step {
+  width: 25px;
+  height: 25px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  margin: auto;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-
-.input-modal {
-  flex: 1;
-}
-
-.modal-footer-icons {
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.control-row {
-  margin: 20px 0 25px 0;
-  position: relative;
-}
-
-.modal-control-row {
-  margin: 20px 0 25px 0;
-  padding-bottom: 20px;
-  position: relative;
-}
-
-.modal-control-bar {
-  position: absolute;
-  top: 20%;
-  left: 0;
-  width: 100%;
-  margin-bottom: 0 !important;
-}
-
-.control-bar {
-  position: absolute;
-  top: 27%;
-  left: 0;
-  width: 100%;
-  margin-bottom: 0 !important;
-}
-
-.control-play {
-  width: 50px;
-  height: 50px;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  background: white;
-  margin: auto;
-  z-index: 2;
-  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
-  justify-content: center;
-}
-
-.modal-control-play {
-  width: 50px;
-  height: 50px;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  background: white;
-  margin: auto;
-  z-index: 100;
-  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+  align-items: center;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -221,9 +103,51 @@ article:hover {
   cursor: pointer;
 }
 
-.favorite-modal {
+.control-row {
+  margin: 20px 0 25px 0;
+  position: relative;
+}
+
+.control-bar {
+  position: absolute;
+  top: 27%;
+  left: 0;
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.control-play {
+  width: 50px;
+  height: 50px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: white;
+  margin: auto;
+  z-index: 2;
+  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+  justify-content: center;
+}
+
+/****** MODAL STYLES ******/
+.modal-card-head {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+#modal-favorite {
   font-size: 40px;
   margin-right: 15px;
+}
+
+#modal-title-input {
+  flex: 1;
+}
+
+.modal-footer-icons {
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .fa-trash-o {
@@ -236,10 +160,56 @@ article:hover {
   cursor: pointer;
 }
 
-.step-note:hover {
-  background-color: lightblue;
+/****** MODAL STEP GRID ******/
+.modal-step {
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
 }
 
+.modal-step:hover {
+  background-color: gold;
+}
+
+.unclicked {
+  border: none;
+}
+
+.clicked {
+  border: solid 3px red;
+}
+
+/****** MODAL CONTROL BAR ******/
+.modal-control-row {
+  margin: 20px 0 25px 0;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.modal-control-bar {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.modal-control-play {
+  width: 50px;
+  height: 50px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: white;
+  margin: auto;
+  z-index: 100;
+  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+  justify-content: center;
+}
+
+/****** MODAL NOTE SELECTOR ******/
 #modal-key-table {
   margin-bottom: 13px;
 }
@@ -258,7 +228,19 @@ article:hover {
   height: 15px;
 }
 
-/*Navbar*/
+.step-selector {
+  cursor: pointer;
+}
+
+.step-selector:hover {
+  background-color: gold;
+}
+
+.picked {
+  background-color: red;
+}
+
+/****** NAVBAR STYLES ******/
 @media only screen and (max-width: 1024px) {
   .navbar {
     display: flex !important;
@@ -269,11 +251,11 @@ article:hover {
     margin: auto !important;
   }
 
-  #input-searcher-div {
+  #navbar-input-item {
     flex: 1 !important;
   }
 
-  #input-searcher {
+  #navbar-input-control {
     width: 100% !important;
   }
 
