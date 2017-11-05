@@ -73,10 +73,13 @@ article:hover {
   margin: auto;
 }
 
-.fa-play {
+.control-icon {
   font-size: 30px;
   text-align: center;
   line-height: 50px;
+}
+
+.fa-play {
   padding-left: 5px;
 }
 

@@ -2,6 +2,10 @@ var allRiffs;
 var currentRiff;
 var loop;
 var currentSequence;
+//use these to update/insert db
+var modalSequence,
+    modalBeat; 
+
 var synth;
 var isPlaying = false;
 
@@ -15,15 +19,18 @@ $.ajax({
 });
 
 StartAudioContext(Tone.context, "article").then(function() {
+  // let openPlay = false;
 
   //opens modal when click on tile
   $('article').on('click', function (evt) {
+
     if (evt.target.id === 'favorite') return;
     if (evt.target.className.indexOf('fa') > -1) return;
     if (loop && isPlaying) {
       loop.stop();
       isPlaying = false;
     }
+
     $('.modal').addClass('is-active');
     
     var riffId = $(this).data('id');
@@ -39,61 +46,73 @@ StartAudioContext(Tone.context, "article").then(function() {
       // Tone.Transport.start();
 
       //get step array
-      var sequence = getStepArray(riff.sequence);
+      modalSequence = getStepArray(riff.sequence);
+      modalBeat = riff.beat_division;
       
       $.each($('.modal-step'), function(index, value) {
-        $(this).text(sequence[index]);
+        $(this).text(modalSequence[index]);
       });
 
-      console.log(sequence);
-
-      // keep track of which step in the sequence we're on
-      var step = 0;
-
-      // create instrument
-      synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
-
-      // initialize loop with parameters from riff
-      loop = new Tone.Loop(function(time) {
-        if (step >= sequence.length) {
-          step = 0;
-        }
-
-        if (sequence[step] != " ") {
-          synth.triggerAttackRelease(sequence[step], "8n", time);
-        }
-
-        step++;
-
-      }, "8n");
+      defineLoop(modalSequence, modalBeat);
 
     });
-
 
   });
 
-  function getStepArray (dbString) {
-    let seq = dbString.split(", ");
+  function defineLoop (seq, beat) { 
+   // keep track of which step in the sequence we're on
+    var step = 0;
 
-    seq[0] = seq[0].slice(1);
-    seq[seq.length-1] = seq[seq.length-1].slice(0, -1);
-    seq.forEach((el, i) => {
-      seq[i] = el.slice(1,-1);
-    });
+    // create instrument
+    synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
 
-    return seq;
-  }
+    // initialize loop with parameters from riff
+    loop = new Tone.Loop(function(time) {
+      if (step >= seq.length) {
+        step = 0;
+      }
+
+      if (seq[step] != " ") {
+        synth.triggerAttackRelease(seq[step], "8n", time);
+      }
+
+      step++;
+
+    }, `${beat}n`);
+  };
 
   $("#cn-button").on("click", function(event) {
-    console.log(isPlaying);
+    
+    let $wrap = $('#cn-wrapper');
+
     if (isPlaying) {
       isPlaying = false;
-      loop.stop();
+      loop.stop(0);
+      $wrap.removeClass('opened-nav');
+      $('#modal-control-icon').removeClass('fa-stop');
+      $('#modal-control-icon').addClass('fa-play');
     } else {
-      isPlaying = true;
-      loop.start();
+      setTimeout(function() {
+        loop.start(0);
+        isPlaying = true;
+      }, 100);
+      $wrap.addClass('opened-nav');
+      $('#modal-control-icon').removeClass('fa-play');
+      $('#modal-control-icon').addClass('fa-stop');
     }
-  
+
+  });
+
+  $('.modal-beat-sel').on('click', function () {
+    loop.stop();
+    modalBeat = $(this).data('id');
+    $('.csstransforms .cn-wrapper li a').addClass('is-beat');
+    loop = undefined;
+    defineLoop(modalSequence, modalBeat);
+    setTimeout(function() {
+      loop.start(0);
+      isPlaying = true;
+    }, 100);
   });
 
   // Play the sequence that was clicked
@@ -138,7 +157,6 @@ StartAudioContext(Tone.context, "article").then(function() {
       step++;
     }, "8n");
 
-
     Tone.Transport.start();
     setTimeout(function() {
       loop.start();
@@ -163,56 +181,6 @@ StartAudioContext(Tone.context, "article").then(function() {
     isPlaying = false;
   });
 
-  //clear step when modal closes
-  function clearModal() {
-    $('.modal-step').each(function () {
-      $(this).empty();
-      $(this).addClass('unclicked');
-      $(this).removeClass('clicked');
-    });
-    $('.step-selector').each(function () {
-      $(this).removeClass('picked');
-    });
-  }
-
-  //toggling favorite star
-  $('.favorite').on('click', function () {
-    if ($(this).hasClass('fa-star')) {
-      $(this).removeClass('fa-star');
-      $(this).addClass('fa-star-o');
-    } else {
-      $(this).removeClass('fa-star-o');
-      $(this).addClass('fa-star');
-    }
-  });
-
-  //altering to sharps and flats
-  $('.mod-check').on('click', function () {
-    let key = $(this).attr('id')[0];
-    let mod = $(this).attr('id')[1];
-    let val = `${key}${mod}`;
-    let p8 = $(`#${key}-p8-option`).val();
-
-    if ($(`#${val}-check`).prop('checked')) {
-      if (mod === 'b') $(`#${key}s-check`).prop('checked', false);
-      else $(`#${key}b-check`).prop('checked', false);
-
-      if (mod === 's') val = key + '#';
-    } else {
-      val = key;
-    }
-
-    $(`#${key}-step-selector`).attr('value', `${val}${p8}`);
-  });
-
-  //changing octaves
-  $('.p8-option').on('change', function () {
-    let p8 = $(this).val();
-    let key = $(this).attr('id')[0];
-    let curVal = $(`#${key}-step-selector`).attr('value').slice(0,-1);
-    $(`#${key}-step-selector`).attr('value', curVal+p8);
-  });
-
   //pick which notes are sent to steps
   $('.step-selector').on('click', function () {
     let that = this;
@@ -230,10 +198,11 @@ StartAudioContext(Tone.context, "article").then(function() {
       $('.clicked').each(function () {
         $(this).html($(that).attr('value'));
         $(this).val($(that).attr('value'));
+        modalSequence[parseInt($(this).data('id'))] = $(that).attr('value');
         $(this).removeClass('clicked');
         $(this).addClass('unclicked');
         $(that).removeClass('picked');
-    });
+      });
     }
   });
 
@@ -246,6 +215,7 @@ StartAudioContext(Tone.context, "article").then(function() {
       if ($('.picked').attr('value') !== undefined) {
         $(this).html($('.picked').attr('value'));
         $(this).val($('.picked').attr('value'));
+        modalSequence[parseInt($(this).data('id'))] = $('.picked').attr('value');
         $(this).addClass('unclicked');
         $(this).removeClass('clicked');
       } else {
@@ -253,12 +223,73 @@ StartAudioContext(Tone.context, "article").then(function() {
           $(this).empty();
         }
       }
-
     } else {
       $(this).removeClass('clicked');
       $(this).addClass('unclicked');		
     }
-  	
   });
 
 });
+
+//clear step when modal closes
+function clearModal() {
+  $('.modal-step').each(function () {
+    $(this).empty();
+    $(this).addClass('unclicked');
+    $(this).removeClass('clicked');
+  });
+  $('.step-selector').each(function () {
+    $(this).removeClass('picked');
+  });
+}
+
+//toggling favorite star
+$('.favorite').on('click', function () {
+  if ($(this).hasClass('fa-star')) {
+    $(this).removeClass('fa-star');
+    $(this).addClass('fa-star-o');
+  } else {
+    $(this).removeClass('fa-star-o');
+    $(this).addClass('fa-star');
+  }
+});
+
+//altering to sharps and flats
+$('.mod-check').on('click', function () {
+  let key = $(this).attr('id')[0];
+  let mod = $(this).attr('id')[1];
+  let val = `${key}${mod}`;
+  let p8 = $(`#${key}-p8-option`).val();
+
+  if ($(`#${val}-check`).prop('checked')) {
+    if (mod === 'b') $(`#${key}s-check`).prop('checked', false);
+    else $(`#${key}b-check`).prop('checked', false);
+
+    if (mod === 's') val = key + '#';
+  } else {
+    val = key;
+  }
+
+  $(`#${key}-step-selector`).attr('value', `${val}${p8}`);
+});
+
+//changing octaves
+$('.p8-option').on('change', function () {
+  let p8 = $(this).val();
+  let key = $(this).attr('id')[0];
+  let curVal = $(`#${key}-step-selector`).attr('value').slice(0,-1);
+  $(`#${key}-step-selector`).attr('value', curVal+p8);
+});
+
+//takes in sequence from db and turns it into proper array
+function getStepArray (dbString) {
+  let seq = dbString.split(", ");
+
+  seq[0] = seq[0].slice(1);
+  seq[seq.length-1] = seq[seq.length-1].slice(0, -1);
+  seq.forEach((el, i) => {
+    seq[i] = el.slice(1,-1);
+  });
+
+  return seq;
+}
