@@ -101,6 +101,10 @@ StartAudioContext(Tone.context, "article").then(function() {
       if (modalStep >= seq.length) {
         modalStep = 0;
       }
+      $('.modal-step').each(function () {
+        $(this).removeClass('active-step');
+      });
+      $(`#modal-step-${modalStep}`).addClass('active-step');
 
       if (seq[modalStep] != " ") {
         synth.triggerAttackRelease(seq[modalStep], "8n", time);
@@ -365,6 +369,9 @@ function clearModal() {
                    ' ', ' ', ' ', ' ',
                    ' ', ' ', ' ', ' ',
                    ' ', ' ', ' ', ' '];
+  $('.modal-step').each(function () {
+    $(this).removeClass('active-step');
+  });
 }
 
 //toggling favorite star
