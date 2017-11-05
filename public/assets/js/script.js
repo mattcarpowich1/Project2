@@ -142,28 +142,6 @@ StartAudioContext(Tone.context, "article").then(function() {
 
     var id = $(this).data('id');
 
-    //check if this id belongs to any of the current loops
-    if (id === loop1ID || id === loop2ID) {
-      //first check if it's loop1
-      if (id === loop1ID) {
-        // if so, stop or start loop
-        if (loop1.state === "started") {
-          loop1.stop(.01);
-        } else {
-          loop1.start(.01);
-        }
-        return false;
-      } else {
-        // we know it's loop2
-        if (loop2.state === "started") {
-          loop2.stop(.01);
-        } else {
-          loop2.start(.01)
-        }
-        return false;
-      }
-    }
-
     for (var i = 0; i < allRiffs.length; i++) {
       if (allRiffs[i].id === id) {
         currentRiff = allRiffs[i];
