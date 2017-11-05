@@ -1,13 +1,10 @@
 var allRiffs;
-var riffIDs = [];
+var riffsPlaying = [];
 var currentRiff;
 var modalLoop;
 
 var loop1;
 var loop2;
-
-var loop1ID;
-var loop2ID;
 
 var modalStep = 0;
 var loop1Step = 0;
@@ -30,9 +27,9 @@ $.ajax({
 }).done(function(riffs) {
   allRiffs = riffs;
   for (var i = 0; i < allRiffs.length; i++) {
-    riffIDs.push(allRiffs[i].id);
+    riffsPlaying.push(0);
   }
-  console.log(riffIDs);
+  console.log(riffsPlaying);
 });
 
 StartAudioContext(Tone.context, "article").then(function() {
@@ -141,6 +138,62 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('.control-play').on('click', function(event) {
 
     var id = $(this).data('id');
+    var riffValue = riffsPlaying[id];
+
+    var arraySum = riffsPlaying.reduce(function(a, b) {
+      return a + b;
+    }, 0);
+
+    // if no loop is assigned
+    if (arraySum === 0) {
+      riffsPlaying[id] = 1;
+      
+    }
+
+    // if both loops are assigned
+    if (arraySum === 3) {
+      // if both loops are playing
+      if (loop1.state === "started" & loop2.state === "started") {
+        // if this loop is not one of the active loops...
+        if (riffValue === 0) {
+          // do nothing
+          return false;
+        }
+        // else, stop the appropriate loop
+        if (riffValue === 1) {
+          loop1.stop(0.1);
+          return false;
+        } else {
+          loop2.stop(0.1);
+          return false;
+        }
+      }
+
+      // if just loop1 is playing...
+      if (loop1.state === "started") {
+        // if this loop is loop1 
+        if (riffValue === 1) {
+          loop1.stop(0.1);
+          return false;
+        } else {
+          loop2.start(0.1);
+          return false;
+        }
+      }
+
+      // if just loop2 is playing 
+      if (loop2.state === "started") {
+        // if this loop is loop2
+        if (riffValue === 2) {
+          loop2.stop(0.1);
+        } else {
+          loop1.start(0.1);
+        }
+      }
+      
+    }
+
+    console.log("SUM: " + arraySum);
 
     for (var i = 0; i < allRiffs.length; i++) {
       if (allRiffs[i].id === id) {
