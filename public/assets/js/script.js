@@ -103,16 +103,15 @@ StartAudioContext(Tone.context, "article").then(function() {
       modalLoop.stop(.01);
       Tone.Transport.stop();
       $wrap.removeClass('opened-nav');
-      $('#modal-control-icon').removeClass('fa-stop');
-      $('#modal-control-icon').addClass('fa-play');
+      toggleStart('modal-control-icon', isPlaying);
     } else {
       Tone.Transport.start();
       setTimeout(function() {
         modalLoop.start(0.01);
+        isPlaying = true;
+        toggleStart('modal-control-icon', isPlaying);
       }, 3);
       $wrap.addClass('opened-nav');
-      $('#modal-control-icon').removeClass('fa-play');
-      $('#modal-control-icon').addClass('fa-stop');
     }
 
   });
@@ -202,6 +201,8 @@ StartAudioContext(Tone.context, "article").then(function() {
     clearModal();
     modalLoop.stop(.01);
     modalLoop = null;
+    isPlaying = false;
+    toggleStart('modal-control-icon', isPlaying);
   });
 
   //closes modal if clicking off of modal
@@ -210,6 +211,8 @@ StartAudioContext(Tone.context, "article").then(function() {
     clearModal();
     modalLoop.stop(.01);
     modalLoop = null;
+    isPlaying = false;
+    toggleStart('modal-control-icon', isPlaying);
   });
 
   //pick which notes are sent to steps
@@ -272,6 +275,8 @@ function clearModal() {
   $('.step-selector').each(function () {
     $(this).removeClass('picked');
   });
+  let $wrap = $('#cn-wrapper');
+  $wrap.removeClass('opened-nav');
 }
 
 //toggling favorite star
@@ -323,4 +328,12 @@ function getStepArray (dbString) {
   });
 
   return seq;
+}
+
+//toggle start/stop button
+function toggleStart (id, started) {
+  let active = started ? 'fa-stop' : 'fa-play';
+  let inactive = started ? 'fa-play' : 'fa-stop';
+  $(`#${id}`).removeClass(inactive);
+  $(`#${id}`).addClass(active);
 }
