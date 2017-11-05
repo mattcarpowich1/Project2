@@ -261,6 +261,7 @@ StartAudioContext(Tone.context, "article").then(function() {
       } else {
         if ($(this).html() !== '') {
           $(this).empty();
+          modalSequence[parseInt($(this).data('id'))] = ' ';
         }
       }
     } else {
