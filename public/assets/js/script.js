@@ -2,6 +2,7 @@ var allRiffs;
 var currentRiff;
 var loop;
 var currentSequence;
+
 //use these to update/insert db
 var modalSequence,
     modalBeat; 
@@ -27,7 +28,8 @@ StartAudioContext(Tone.context, "article").then(function() {
     if (evt.target.id === 'favorite') return;
     if (evt.target.className.indexOf('fa') > -1) return;
     if (loop && isPlaying) {
-      loop.stop();
+      loop.stop(.01);
+      Tone.Transport.stop();
       isPlaying = false;
     }
 
@@ -42,8 +44,6 @@ StartAudioContext(Tone.context, "article").then(function() {
     }).done(function(riff) {
       // set tempo to riff's tempo
       Tone.Transport.bpm.value = 120;
-
-      // Tone.Transport.start();
 
       //get step array
       modalSequence = getStepArray(riff.sequence);
@@ -87,15 +87,17 @@ StartAudioContext(Tone.context, "article").then(function() {
 
     if (isPlaying) {
       isPlaying = false;
-      loop.stop(0);
+      loop.stop(.01);
+      Tone.Transport.stop();
       $wrap.removeClass('opened-nav');
       $('#modal-control-icon').removeClass('fa-stop');
       $('#modal-control-icon').addClass('fa-play');
     } else {
+      Tone.Transport.start();
       setTimeout(function() {
-        loop.start(0);
+        loop.start(0.01);
         isPlaying = true;
-      }, 100);
+      }, 3);
       $wrap.addClass('opened-nav');
       $('#modal-control-icon').removeClass('fa-play');
       $('#modal-control-icon').addClass('fa-stop');
@@ -104,22 +106,25 @@ StartAudioContext(Tone.context, "article").then(function() {
   });
 
   $('.modal-beat-sel').on('click', function () {
-    loop.stop();
+    loop.stop(.01);
+    Tone.Transport.stop();
+    isPlaying = false;
     modalBeat = $(this).data('id');
     $('.csstransforms .cn-wrapper li a').addClass('is-beat');
     loop = undefined;
     defineLoop(modalSequence, modalBeat);
+    Tone.Transport.start();
     setTimeout(function() {
-      loop.start(0);
+      loop.start(0.01);
       isPlaying = true;
-    }, 100);
+    }, 3);
   });
 
   // Play the sequence that was clicked
   $('.control-play').on('click', function(event) {
 
     if (isPlaying) {
-      loop.stop();
+      loop.stop(.01);
       isPlaying = false;
       return;
     }
@@ -159,7 +164,7 @@ StartAudioContext(Tone.context, "article").then(function() {
 
     Tone.Transport.start();
     setTimeout(function() {
-      loop.start();
+      loop.start(.01);
       isPlaying = true;
     }, 3);
 
@@ -169,7 +174,7 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('.close-modal').on('click', function () {
     $('.modal').removeClass('is-active');
     clearModal();
-    loop.stop();
+    loop.stop(.01);
     isPlaying = false;
   });
 
@@ -177,7 +182,7 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('.modal-background').on('click', function () {
     $('.modal').removeClass('is-active');
     clearModal();
-    loop.stop();
+    loop.stop(.01);
     isPlaying = false;
   });
 
