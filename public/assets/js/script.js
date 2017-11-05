@@ -100,6 +100,7 @@ StartAudioContext(Tone.context, "article").then(function() {
     let $wrap = $('#cn-wrapper');
 
     if (modalLoop.state === "started") {
+      isPlaying = false;
       modalLoop.stop(.01);
       Tone.Transport.stop();
       $wrap.removeClass('opened-nav');
