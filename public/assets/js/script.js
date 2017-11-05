@@ -1,6 +1,17 @@
 var allRiffs;
 var currentRiff;
-var loop;
+var modalLoop;
+
+var loop1;
+var loop2;
+
+var loop1ID;
+var loop2ID;
+
+var modalStep = 0;
+var loop1Step = 0;
+var loop2Step = 0;
+
 var currentSequence;
 
 //use these to update/insert db
@@ -25,12 +36,15 @@ StartAudioContext(Tone.context, "article").then(function() {
   //opens modal when click on tile
   $('article').on('click', function (evt) {
 
+    Tone.Transport.stop();
+
     if (evt.target.id === 'favorite') return;
     if (evt.target.className.indexOf('fa') > -1) return;
-    if (loop && isPlaying) {
-      loop.stop(.01);
-      Tone.Transport.stop();
-      isPlaying = false;
+    if (loop1) {
+      loop1.stop(.01);
+    }
+    if (loop2) {
+      loop2.stop(.01);
     }
 
     $('.modal').addClass('is-active');
@@ -61,22 +75,22 @@ StartAudioContext(Tone.context, "article").then(function() {
 
   function defineLoop (seq, beat) { 
    // keep track of which step in the sequence we're on
-    var step = 0;
+    // var step = 0;
 
     // create instrument
     synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
 
     // initialize loop with parameters from riff
-    loop = new Tone.Loop(function(time) {
-      if (step >= seq.length) {
-        step = 0;
+    modalLoop = new Tone.Loop(function(time) {
+      if (modalStep >= seq.length) {
+        modalStep = 0;
       }
 
-      if (seq[step] != " ") {
-        synth.triggerAttackRelease(seq[step], "8n", time);
+      if (seq[modalStep] != " ") {
+        synth.triggerAttackRelease(seq[modalStep], "8n", time);
       }
 
-      step++;
+      modalStep++;
 
     }, `${beat}n`);
   };
@@ -85,16 +99,16 @@ StartAudioContext(Tone.context, "article").then(function() {
     
     let $wrap = $('#cn-wrapper');
 
-    if (isPlaying) {
+    if (modalLoop.state === "started") {
       isPlaying = false;
-      loop.stop(.01);
+      modalLoop.stop(.01);
       Tone.Transport.stop();
       $wrap.removeClass('opened-nav');
       toggleStart('modal-control-icon', isPlaying);
     } else {
       Tone.Transport.start();
       setTimeout(function() {
-        loop.start(0.01);
+        modalLoop.start(0.01);
         isPlaying = true;
         toggleStart('modal-control-icon', isPlaying);
       }, 3);
@@ -121,15 +135,29 @@ StartAudioContext(Tone.context, "article").then(function() {
   // Play the sequence that was clicked
   $('.control-play').on('click', function(event) {
 
-    if (isPlaying) {
-      loop.stop(.01);
-      isPlaying = false;
-      return;
-    }
-
-    var step = 0;
-
     var id = $(this).data('id');
+
+    //check if this id belongs to any of the current loops
+    if (id === loop1ID || id === loop2ID) {
+      //first check if it's loop1
+      if (id === loop1ID) {
+        // if so, stop or start loop
+        if (loop1.state === "started") {
+          loop1.stop(.01);
+        } else {
+          loop1.start(.01);
+        }
+        return false;
+      } else {
+        // we know it's loop2
+        if (loop2.state === "started") {
+          loop2.stop(.01);
+        } else {
+          loop2.start(.01)
+        }
+        return false;
+      }
+    }
 
     for (var i = 0; i < allRiffs.length; i++) {
       if (allRiffs[i].id === id) {
@@ -172,7 +200,8 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('.close-modal').on('click', function () {
     $('.modal').removeClass('is-active');
     clearModal();
-    loop.stop(.01);
+    modalLoop.stop(.01);
+    modalLoop = null;
     isPlaying = false;
     toggleStart('modal-control-icon', isPlaying);
   });
@@ -181,7 +210,8 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('.modal-background').on('click', function () {
     $('.modal').removeClass('is-active');
     clearModal();
-    loop.stop(.01);
+    modalLoop.stop(.01);
+    modalLoop = null;
     isPlaying = false;
     toggleStart('modal-control-icon', isPlaying);
   });
