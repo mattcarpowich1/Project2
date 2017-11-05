@@ -1,4 +1,5 @@
 var allRiffs;
+var riffIDs = [];
 var currentRiff;
 var modalLoop;
 
@@ -28,6 +29,10 @@ $.ajax({
   method: "GET"
 }).done(function(riffs) {
   allRiffs = riffs;
+  for (var i = 0; i < allRiffs.length; i++) {
+    riffIDs.push(allRiffs[i].id);
+  }
+  console.log(riffIDs);
 });
 
 StartAudioContext(Tone.context, "article").then(function() {
