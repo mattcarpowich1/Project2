@@ -20,6 +20,8 @@ let modalSequence = [' ', ' ', ' ', ' ',
 let modalBeat = 8; 
 
 var synth;
+var synth1;
+var synth2;
 var isPlaying = false;
 
 Tone.Transport.start();
@@ -150,7 +152,17 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('.control-play').on('click', function(event) {
 
     var id = $(this).data('id');
-    var riffValue = riffsPlaying[id];
+
+    var index;
+
+    for (var i = 0; i < allRiffs.length; i++) {
+      if (allRiffs[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    var riffValue = riffsPlaying[index];
 
     var arraySum = riffsPlaying.reduce(function(a, b) {
       return a + b;
@@ -158,8 +170,30 @@ StartAudioContext(Tone.context, "article").then(function() {
 
     // if no loop is assigned
     if (arraySum === 0) {
-      riffsPlaying[id] = 1;
-      
+      seq = allRiffs[index].sequence;
+
+      synth1 = new Tone.PolySynth(8, Tone.Synth).toMaster();
+
+      // initialize loop1
+      loop1 = new Tone.Loop(function(time) {
+        if (loop1Step >= seq.length) {
+          loop1Step = 0;
+        }
+
+        if (seq[loop1Step] != " ") {
+          synth1.triggerAttackRelease(seq[loop1Step], "8n", time);
+        }
+
+        loop1Step++;
+
+      }, "8n");
+
+      Tone.Transport.start();
+      setTimeout(function() {
+        loop1.start(0.01);
+      }, 3);
+       
+      return false;
     }
 
     // if both loops are assigned
