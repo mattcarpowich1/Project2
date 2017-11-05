@@ -16,8 +16,11 @@ var loop2Step = 0;
 var currentSequence;
 
 //use these to update/insert db
-var modalSequence,
-    modalBeat; 
+let modalSequence = [' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' '];
+let modalBeat = 8; 
 
 var synth;
 var isPlaying = false;
@@ -55,27 +58,36 @@ StartAudioContext(Tone.context, "article").then(function() {
     $('.modal').addClass('is-active');
     
     var riffId = $(this).data('id');
-    var url = '/api/riffs/' + riffId;
 
-    $.ajax({
-      url: url,
-      method: "GET"
-    }).done(function(riff) {
-      // set tempo to riff's tempo
-      Tone.Transport.bpm.value = 120;
+    if (riffId !== '') {
 
-      //get step array
-      modalSequence = getStepArray(riff.sequence);
-      modalBeat = riff.beat_division;
+      var url = '/api/riffs/' + riffId;
+      $.ajax({
+        url: url,
+        method: "GET"
+      }).done(function(riff) {
+        // set tempo to riff's tempo
+        Tone.Transport.bpm.value = 120;
+
+        //get step array
+        modalSequence = getStepArray(riff.sequence);
+        modalBeat = riff.beat_division;
+
+        //set riff name
+        $('#modal-title-input').attr('placeholder', riff.title);
       
+        $.each($('.modal-step'), function(index, value) {
+          $(this).text(modalSequence[index]);
+        });
+        defineLoop(modalSequence, modalBeat);
+      });
+    } else {
       $.each($('.modal-step'), function(index, value) {
         $(this).text(modalSequence[index]);
       });
-
       defineLoop(modalSequence, modalBeat);
-
-    });
-
+      $('#modal-title-input').attr('placeholder', 'New Riff');
+    }
   });
 
   function defineLoop (seq, beat) { 
@@ -123,16 +135,16 @@ StartAudioContext(Tone.context, "article").then(function() {
   });
 
   $('.modal-beat-sel').on('click', function () {
-    loop.stop(.01);
+    modalLoop.stop(.01);
     Tone.Transport.stop();
     isPlaying = false;
     modalBeat = $(this).data('id');
     $('.csstransforms .cn-wrapper li a').addClass('is-beat');
-    loop = undefined;
+    modalLoop = undefined;
     defineLoop(modalSequence, modalBeat);
     Tone.Transport.start();
     setTimeout(function() {
-      loop.start(0.01);
+      modalLoop.start(0.01);
       isPlaying = true;
     }, 3);
   });
@@ -284,6 +296,10 @@ function clearModal() {
   });
   let $wrap = $('#cn-wrapper');
   $wrap.removeClass('opened-nav');
+  modalSequence = [' ', ' ', ' ', ' ',
+                   ' ', ' ', ' ', ' ',
+                   ' ', ' ', ' ', ' ',
+                   ' ', ' ', ' ', ' '];
 }
 
 //toggling favorite star
