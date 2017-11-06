@@ -44,11 +44,13 @@ StartAudioContext(Tone.context, "article").then(function() {
     if (evt.target.id === 'favorite') return;
     if (evt.target.className.indexOf('fa') > -1) return;
     if (evt.target.className.indexOf('control-play') > -1) return;
-    if (loop1) {
-      loop1.stop(.01);
+    if (loopsPlaying[0] != null) {
+      loopsPlaying[0].stop(.01);
+      loopsPlaying[0] = null;
     }
-    if (loop2) {
-      loop2.stop(.01);
+    if (loopsPlaying[1] != null) {
+      loopsPlaying[1].stop(.01);
+      loopsPlaying[1] = null;
     }
 
     $('.modal').addClass('is-active');
