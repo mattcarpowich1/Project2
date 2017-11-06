@@ -1,12 +1,29 @@
 var allRiffs;
+var activeRiffs = [null, null];
+var loopsPlaying = [null, null];
 var currentRiff;
-var loop;
+var modalLoop;
+
+var loop1;
+var loop2;
+
+var modalStep = 0;
+var loop1Step = 0;
+var loop2Step = 0;
+var step = 0;
+
 var currentSequence;
+
 //use these to update/insert db
-var modalSequence,
-    modalBeat; 
+let modalSequence = [' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' '];
+let modalBeat = 8; 
 
 var synth;
+var synth1;
+var synth2;
 var isPlaying = false;
 
 Tone.Transport.start();
@@ -26,57 +43,73 @@ StartAudioContext(Tone.context, "article").then(function() {
 
     if (evt.target.id === 'favorite') return;
     if (evt.target.className.indexOf('fa') > -1) return;
-    if (loop && isPlaying) {
-      loop.stop();
-      isPlaying = false;
+    if (evt.target.className.indexOf('control-play') > -1) return;
+    if (loopsPlaying[0] != null) {
+      loopsPlaying[0].stop(.01);
+      loopsPlaying[0] = null;
+    }
+    if (loopsPlaying[1] != null) {
+      loopsPlaying[1].stop(.01);
+      loopsPlaying[1] = null;
     }
 
     $('.modal').addClass('is-active');
     
     var riffId = $(this).data('id');
-    var url = '/api/riffs/' + riffId;
 
-    $.ajax({
-      url: url,
-      method: "GET"
-    }).done(function(riff) {
-      // set tempo to riff's tempo
-      Tone.Transport.bpm.value = 120;
+    if (riffId !== '') {
 
-      // Tone.Transport.start();
+      var url = '/api/riffs/' + riffId;
+      $.ajax({
+        url: url,
+        method: "GET"
+      }).done(function(riff) {
+        // set tempo to riff's tempo
+        Tone.Transport.bpm.value = 120;
 
-      //get step array
-      modalSequence = getStepArray(riff.sequence);
-      modalBeat = riff.beat_division;
+        //get step array
+        modalSequence = getStepArray(riff.sequence);
+        modalBeat = riff.beat_division;
+
+        //set riff name
+        $('#modal-title-input').attr('placeholder', riff.title);
       
+        $.each($('.modal-step'), function(index, value) {
+          $(this).text(modalSequence[index]);
+        });
+        defineLoop(modalSequence, modalBeat);
+      });
+    } else {
       $.each($('.modal-step'), function(index, value) {
         $(this).text(modalSequence[index]);
       });
-
       defineLoop(modalSequence, modalBeat);
-
-    });
-
+      $('#modal-title-input').attr('placeholder', 'New Riff');
+    }
   });
 
   function defineLoop (seq, beat) { 
    // keep track of which step in the sequence we're on
-    var step = 0;
+    // var step = 0;
 
     // create instrument
     synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
 
     // initialize loop with parameters from riff
-    loop = new Tone.Loop(function(time) {
-      if (step >= seq.length) {
-        step = 0;
+    modalLoop = new Tone.Loop(function(time) {
+      if (modalStep >= seq.length) {
+        modalStep = 0;
+      }
+      $('.modal-step').each(function () {
+        $(this).removeClass('active-step');
+      });
+      $(`#modal-step-${modalStep}`).addClass('active-step');
+
+      if (seq[modalStep] != " ") {
+        synth.triggerAttackRelease(seq[modalStep], "8n", time);
       }
 
-      if (seq[step] != " ") {
-        synth.triggerAttackRelease(seq[step], "8n", time);
-      }
-
-      step++;
+      modalStep++;
 
     }, `${beat}n`);
   };
@@ -85,83 +118,54 @@ StartAudioContext(Tone.context, "article").then(function() {
     
     let $wrap = $('#cn-wrapper');
 
-    if (isPlaying) {
+    if (modalLoop.state === "started") {
       isPlaying = false;
-      loop.stop(0);
+      modalLoop.stop(.01);
+      Tone.Transport.stop();
       $wrap.removeClass('opened-nav');
-      $('#modal-control-icon').removeClass('fa-stop');
-      $('#modal-control-icon').addClass('fa-play');
+      toggleStart('modal-control-icon', isPlaying);
     } else {
+      Tone.Transport.start();
       setTimeout(function() {
-        loop.start(0);
+        modalLoop.start(0.01);
         isPlaying = true;
-      }, 100);
+        toggleStart('modal-control-icon', isPlaying);
+      }, 3);
       $wrap.addClass('opened-nav');
-      $('#modal-control-icon').removeClass('fa-play');
-      $('#modal-control-icon').addClass('fa-stop');
     }
 
   });
 
   $('.modal-beat-sel').on('click', function () {
-    loop.stop();
+    modalLoop.stop(.01);
+    Tone.Transport.stop();
+    isPlaying = false;
     modalBeat = $(this).data('id');
     $('.csstransforms .cn-wrapper li a').addClass('is-beat');
-    loop = undefined;
+    modalLoop = undefined;
     defineLoop(modalSequence, modalBeat);
+    Tone.Transport.start();
     setTimeout(function() {
-      loop.start(0);
+      modalLoop.start(0.01);
       isPlaying = true;
-    }, 100);
+    }, 3);
   });
 
   // Play the sequence that was clicked
   $('.control-play').on('click', function(event) {
 
-    if (isPlaying) {
-      loop.stop();
-      isPlaying = false;
-      return;
-    }
-
-    var step = 0;
-
     var id = $(this).data('id');
+
+    var index;
 
     for (var i = 0; i < allRiffs.length; i++) {
       if (allRiffs[i].id === id) {
-        currentRiff = allRiffs[i];
+        index = i;
         break;
       }
     }
 
-    // set tempo 
-    Tone.Transport.bpm.value = currentRiff.tempo;
-
-    // get sequence and format it
-    currentSequence = getStepArray(currentRiff.sequence);
-
-    // initialize instrument
-    synth = new Tone.PolySynth(8, Tone.Synth).toMaster();
-
-    // initialize loop
-    loop = new Tone.Loop(function(time) {
-      if (step >= currentSequence.length) {
-        step = 0;
-      }
-
-      if (currentSequence[step] != " ") {
-        synth.triggerAttackRelease(currentSequence[step], "8n", time);
-      }
-
-      step++;
-    }, "8n");
-
-    Tone.Transport.start();
-    setTimeout(function() {
-      loop.start();
-      isPlaying = true;
-    }, 3);
+    handlePlay(id, index);
 
   });
 
@@ -169,16 +173,20 @@ StartAudioContext(Tone.context, "article").then(function() {
   $('.close-modal').on('click', function () {
     $('.modal').removeClass('is-active');
     clearModal();
-    loop.stop();
+    modalLoop.stop(.01);
+    modalLoop = null;
     isPlaying = false;
+    toggleStart('modal-control-icon', isPlaying);
   });
 
   //closes modal if clicking off of modal
   $('.modal-background').on('click', function () {
     $('.modal').removeClass('is-active');
     clearModal();
-    loop.stop();
+    modalLoop.stop(.01);
+    modalLoop = null;
     isPlaying = false;
+    toggleStart('modal-control-icon', isPlaying);
   });
 
   //pick which notes are sent to steps
@@ -221,6 +229,7 @@ StartAudioContext(Tone.context, "article").then(function() {
       } else {
         if ($(this).html() !== '') {
           $(this).empty();
+          modalSequence[parseInt($(this).data('id'))] = ' ';
         }
       }
     } else {
@@ -240,6 +249,15 @@ function clearModal() {
   });
   $('.step-selector').each(function () {
     $(this).removeClass('picked');
+  });
+  let $wrap = $('#cn-wrapper');
+  $wrap.removeClass('opened-nav');
+  modalSequence = [' ', ' ', ' ', ' ',
+                   ' ', ' ', ' ', ' ',
+                   ' ', ' ', ' ', ' ',
+                   ' ', ' ', ' ', ' '];
+  $('.modal-step').each(function () {
+    $(this).removeClass('active-step');
   });
 }
 
@@ -292,4 +310,258 @@ function getStepArray (dbString) {
   });
 
   return seq;
+}
+
+//toggle start/stop button
+function toggleStart (id, started) {
+  let active = started ? 'fa-stop' : 'fa-play';
+  let inactive = started ? 'fa-play' : 'fa-stop';
+  $(`#${id}`).removeClass(inactive);
+  $(`#${id}`).addClass(active);
+}
+
+//main screen play button handler
+function handlePlay(id, index) {
+
+  var done = false;
+
+  var riff = allRiffs[index];
+  var seq = getStepArray(riff.sequence);
+  var beat = riff.beat_division;
+
+  if (activeRiffs[0] === null && activeRiffs[1] === null) {
+
+    synth1 = new Tone.PolySynth(2, Tone.Synth).toMaster();
+
+    loop1Step = 0;
+
+    var loop = new Tone.Loop(function(time) {
+      if (loop1Step >= seq.length) {
+        loop1Step = 0;
+      }
+
+      if (seq[loop1Step] != " ") {
+        synth1.triggerAttackRelease(seq[loop1Step], "8n", time);
+      }
+
+      loop1Step++;
+
+    }, `${beat}n`);
+
+    activeRiffs[0] = id;
+    loopsPlaying[0] = loop;
+    Tone.Transport.start();
+    loopsPlaying[0].start(0.01);
+    done = true;
+  }
+
+  // if there are two loops playing...
+  if (!done && (loopsPlaying[0] && loopsPlaying[1])) {
+    // if the first loop is clicked stop it
+    if (id === activeRiffs[0]) {
+      loopsPlaying[0].stop(.01);
+      loopsPlaying[0] = null;
+      done = true;
+    } else if (id === activeRiffs[1]) {
+      //stop the second loop
+      loopsPlaying[1].stop(.01);
+      loopsPlaying[1] = null;
+      done = true;
+    } else {
+      //some third loop was clicked, do nothing
+      done = true;
+    }
+  }
+
+  // if there is one loop playing
+  if (!done && (loopsPlaying[0] || loopsPlaying[1])) {
+    // if one of the active riffs was clicked...
+    if (activeRiffs.indexOf(id) > -1) {
+      var clickedIndex = activeRiffs.indexOf(id);
+      // if the clicked one is playing, stop it
+      if (loopsPlaying[clickedIndex]) {
+        loopsPlaying[clickedIndex].stop(.01);
+        Tone.Transport.stop();
+        loopsPlaying[clickedIndex] = null;
+        done = true;
+      } else {
+        // start the other active riff
+        // var otherIndex = Math.abs(clickedIndex - 1);
+        if (clickedIndex === 0) {
+          loop1Step = 0;
+          var loop = new Tone.Loop(function(time) {
+            if (loop1Step >= seq.length) {
+              loop1Step = 0;
+            }
+
+            if (seq[loop1Step] != " ") {
+              synth1.triggerAttackRelease(seq[loop1Step], "8n", time);
+            }
+
+            loop1Step++;
+          }, `${beat}n`);
+        } else {
+          loop2Step = 0;
+          var loop = new Tone.Loop(function(time) {
+            if (loop2Step >= seq.length) {
+              loop2Step = 0;
+            }
+
+            if (seq[loop2Step] != " ") {
+              synth2.triggerAttackRelease(seq[loop2Step], "8n", time);
+            }
+
+            loop2Step++;
+          }, `${beat}n`);
+        }
+
+        loopsPlaying[clickedIndex] = loop;
+        loopsPlaying[clickedIndex].start(.01);
+        done = true;
+        return false;
+      }
+    } else {
+      // a nonactive riff was clicked
+      var availableIndex, availableSynth;
+      if (loopsPlaying[0]) {
+        availableIndex = 1;
+        if (synth2) {
+          availableSynth = synth2;
+        } else {
+          synth2 = new Tone.PolySynth(2, Tone.Synth).toMaster();
+          availableSynth = synth2;
+        }
+      } else {
+        availableIndex = 0;
+        availableSynth = synth1;
+      }
+      seq = getStepArray(allRiffs[index].sequence);
+      beat = allRiffs[index].beat_division;
+
+      var loop2;
+
+      if (availableIndex === 0) {
+        loop1Step = 0;
+        loop2 = new Tone.Loop(function(time) {
+
+          if (loop1Step >= seq.length) {
+            loop1Step = 0;
+          }
+
+          if (seq[loop1Step] != " ") {
+            availableSynth.triggerAttackRelease(seq[loop1Step], "8n", time);
+          }
+
+          loop1Step++;
+
+        }, `${beat}n`);
+      } else {
+        loop2Step = 0;
+        loop2 = new Tone.Loop(function(time) {
+
+          if (loop2Step >= seq.length) {
+            loop2Step = 0;
+          }
+
+          if (seq[loop2Step] != " ") {
+            availableSynth.triggerAttackRelease(seq[loop2Step], "8n", time);
+          }
+
+          loop2Step++;
+
+        }, `${beat}n`);
+      }
+
+      Tone.Transport.start();
+      loopsPlaying[availableIndex] = loop2;
+      loopsPlaying[availableIndex].start();
+      activeRiffs[availableIndex] = allRiffs[index].id;
+      done = true;
+      return false;
+    }
+  }
+
+  // if no loops are playing
+  if (!done && (loopsPlaying[0] === null && loopsPlaying[1] === null)) {
+    // if an active riff was clicked  
+    if (activeRiffs.indexOf(id) > -1) {
+      var activeIndex = activeRiffs.indexOf(id);
+      if (activeIndex === 0) {
+        if (!synth1) {
+          synth1 = new Tone.PolySynth(2, Tone.Synth).toMaster();
+        }
+
+        var loop = new Tone.Loop(function(time) {
+          if (loop1Step >= seq.length) {
+            loop1Step = 0;
+          }
+
+          if (seq[loop1Step] != " ") {
+            synth1.triggerAttackRelease(seq[loop1Step], "8n", time);
+          }
+
+          loop1Step++;
+        }, `${beat}n`);
+
+        loop1Step = 0;
+
+        Tone.Transport.start();
+        loopsPlaying[activeIndex] = loop;
+        loopsPlaying[activeIndex].start(.01);
+        done = true;
+        return false;
+      } else {
+        if (!synth2) {
+          synth2 = new Tone.PolySynth(2, Tone.Synth).toMaster();
+        }
+
+
+        var loop2 = new Tone.Loop(function(time) {
+          if (loop2Step >= seq.length) {
+            loop2Step = 0;
+          }
+
+          if (seq[loop2Step] != " ") {
+            synth2.triggerAttackRelease(seq[loop2Step], "8n", time);
+          }
+
+          loop2Step++;
+        }, `${beat}n`);
+
+        loop2Step = 0;
+
+        Tone.Transport.start();
+        loopsPlaying[activeIndex] = loop2;
+        loopsPlaying[activeIndex].start(.01);
+        done = true;
+        return false;
+
+
+      }
+    } else {
+      // a nonactive riff was clicked
+      synth2 = new Tone.PolySynth(2, Tone.Synth).toMaster();
+      loop2Step = 0;
+      var loop2 = new Tone.Loop(function(time) {
+        if (loop2Step >= seq.length) {
+          loop2Step = 0;
+        }
+
+        if (seq[loop2Step] != " ") {
+          synth2.triggerAttackRelease(seq[loop2Step], "8n", time);
+        }
+
+        loop2Step++;
+      }, `${beat}n`);
+
+      activeRiffs[1] = id;
+      Tone.Transport.start();
+      loopsPlaying[1] = loop2;
+      loopsPlaying[1].start(.01);
+      done = true;
+      return false;
+    }
+  }
+
+
 }
