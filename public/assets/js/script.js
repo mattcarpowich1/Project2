@@ -43,6 +43,7 @@ StartAudioContext(Tone.context, "article").then(function() {
 
     if (evt.target.id === 'favorite') return;
     if (evt.target.className.indexOf('fa') > -1) return;
+    if (evt.target.className.indexOf('control-play') > -1) return;
     if (loop1) {
       loop1.stop(.01);
     }
@@ -354,16 +355,18 @@ function handlePlay(id, index) {
 
   // if there are two loops playing...
   if (!done && (loopsPlaying[0] && loopsPlaying[1])) {
-    // if one of the playing loops was clicked, stop both
-    if (id === activeRiffs[0] || id === activeRiffs[1]) {
+    // if the first loop is clicked stop it
+    if (id === activeRiffs[0]) {
       loopsPlaying[0].stop(.01);
-      loopsPlaying[1].stop(.01);
-      Tone.Transport.stop();
       loopsPlaying[0] = null;
+      done = true;
+    } else if (id === activeRiffs[1]) {
+      //stop the second loop
+      loopsPlaying[1].stop(.01);
       loopsPlaying[1] = null;
       done = true;
     } else {
-      // some third loop was clicked
+      //some third loop was clicked, do nothing
       done = true;
     }
   }
@@ -414,7 +417,6 @@ function handlePlay(id, index) {
         loopsPlaying[clickedIndex].start(.01);
         done = true;
         return false;
-
       }
     } else {
       // a nonactive riff was clicked
