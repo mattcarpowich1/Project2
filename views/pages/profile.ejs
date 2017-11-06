@@ -1,9 +1,58 @@
-<p>
-ID: <%= user.id %><br/>
-Username: <%= user.username %><br/>
-Name: <%= user.displayName %><br/>
-<% if (user.emails) { %>
-Email: <%= user.emails[0].value %><br/>
-<% } %>
-</p>
-<a href="/logout">Log out</a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Riff Sequencer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.min.css" integrity="sha256-HEtF7HLJZSC3Le1HcsWbz1hDYFPZCqDhZa9QsCgVUdw=" crossorigin="anonymous"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/assets/css/component2.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/styles.css"/>
+    <script src="/assets/js/modernizr-2.6.2.min.js"></script>
+  </head>
+  <body>
+    <% include ../partials/navbar %>
+    <br><br>
+    <section>
+      <div class="container">
+        <div class="columns">
+          <div class="column is-4">
+            <div class="tile is-vertical notification">
+              <div class="content">
+                <h1 class="title"><%= user.displayName %>
+                  <span class="tag is-info">ID:
+                    <%= user.id %>
+                  </span>
+                </h1>
+                <h3 class="subtitle">@<a href="/users/:id"><%= user.username %></a>
+                </h3>
+                <br>
+                <a class="button is-danger" href="/logout">Log out</a>
+              </div>
+            </div>
+            <div class="tile is-vertical notification">
+              <div class="content">
+                List of Favorited Projects
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="tile notification is-info">
+              Projects Column
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Audio Context -->
+  <script type="text/javascript" src="/assets/js/audiocontext.js"></script>
+  <!-- Tone JS -->
+  <script type="text/javascript" src="/assets/js/tone.js"></script>
+  <script type="text/javascript" src="/assets/js/polyfills.js"></script>
+  <script async type="text/javascript" src="/assets/js/script.js"></script>
+  <script async type="text/javascript" src="/assets/js/circlenav.js"></script>
+</html>
