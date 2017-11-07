@@ -8,7 +8,9 @@
       <div class="tile-shine">
         <div class="tile-title">
           <div class="status-bar">
+            <% if (i != -1) { %>
             <i class="fa fa-star-o favorite" id="favorite" aria-hidden="true"></i>
+            <% } %>
           </div>
           <p class="riff-title">
             <% if (i != -1) { %> <%= riffs[i].title %> <% } else { %> New Riff <% } %>
@@ -17,58 +19,122 @@
         <div class="content">
           <div class="columns is-flex">
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-0" 
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-0">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-1"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-1">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-2"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-2">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-3"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-3">
+                </div>
+              </div>
             </div>
           </div>
           <div class="columns is-flex">
             <div class="column">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-4"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-4">
+                </div>
+              </div>
             </div>
             <div class="column">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-5"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-5">
+                </div>
+              </div>
             </div>
             <div class="column">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-6"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-6">
+                </div>
+              </div>
             </div>
             <div class="column">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-7"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-7">
+                </div>
+              </div>
             </div>
           </div>
           <div class="columns is-flex">
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-8"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-8">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-9"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-9">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-10"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-10">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-11"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-11">
+                </div>
+              </div>
             </div>
           </div>
           <div class="columns is-flex">
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-12"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-12">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-13"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-13">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-14"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-14">
+                </div>
+              </div>
             </div>
             <div class="column is-3">
-              <div class="step step-grey"></div>
+              <div class="step-wrapper">
+                <div class="step step-15"
+                     id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-15">
+                </div>
+              </div>
             </div>
           </div>
           <div class="columns control-row is-flex">
@@ -77,8 +143,12 @@
               <i class="fa fa-5 control-icon fa-play" aria-hidden="true"></i>
             </div>-->
             <div class="tile-controller">
-              <input type="radio" name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>"" data-icon="►">
-              <input type="radio" name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>"" data-icon="◼">
+              <input class="controller-btn controller-play" type="radio" value="play"
+                     name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>" 
+                     data-icon="►" data-id="<% if (i != -1) { %><%= riffs[i].id %><% } %>">
+              <input class="controller-btn controller-stop" type="radio" value="stop"
+                     name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>" 
+                     data-icon="◼" data-id="<% if (i != -1) { %><%= riffs[i].id %><% } %>">
             </div>
           </div>
         </div>
