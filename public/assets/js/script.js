@@ -424,19 +424,28 @@ function handlePlay(id, index, hitPlay, hitStop) {
     }
   } else {
     if (activeRiffs.length < maxPlaying) {
-      pushActiveLoop(id, seq, beat);
-      Tone.Transport.start();
-      loopsPlaying[activeRiffs.length - 1].start(0.01);
+      if (ref === -1) {
+        pushActiveLoop(id, seq, beat);
+        Tone.Transport.start();
+        loopsPlaying[activeRiffs.length - 1].start(0.01);
+      }
     } else {
-      //stop and remove last playing loop
-      resetRadio(activeRiffs[activeRiffs.length - 1]);
-      loopsPlaying[activeRiffs.length - 1].stop(.01);
-      popActiveLoop();      
+      if (ref === -1) {
+        //stop and remove last playing loop
+        resetRadio(activeRiffs[activeRiffs.length - 1]);
+        loopsPlaying[activeRiffs.length - 1].stop(.01);
+        popActiveLoop();  
 
-      //start clicked loop
-      pushActiveLoop(id, seq, beat);
-      Tone.Transport.start();
-      loopsPlaying[activeRiffs.length - 1].start(0.01);      
+        $.each($('.step'), function () {
+          $(this).css('border-color', 'black');
+          $(this).css('box-shadow', '0 0 1px 1px rgb(10,10,10)');
+        });    
+
+        //start clicked loop
+        pushActiveLoop(id, seq, beat);
+        Tone.Transport.start();
+        loopsPlaying[activeRiffs.length - 1].start(0.01);  
+      }    
     }
   }
 
