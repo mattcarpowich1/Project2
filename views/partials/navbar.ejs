@@ -1,36 +1,41 @@
-<nav class="navbar is-black">
+<nav class="navbar is-dark">
   <div class="navbar-brand navbar-start">
-    <a class="navbar-item brand-text navbar-start" id="navbar-logo" href="/">
-      PROJECT NAME
+    <a class="navbar-item brand-text navbar-startnis-dark" id="navbar-logo" href="/">
+      Riffster.io
     </a>
   </div>
 
   <div class="navbar-end">
     <div class="field is-grouped">
       <div class="navbar-item" id="navbar-input-item">
+      <div class="btn-wrapper">
+
         <div class="field has-addons">
           <div class="control" id="navbar-input-control">
             <input class="input" type="text" id="navbar-input" placeholder="Search Riffs..">
           </div>
-          <a class="button is-info" id="navbar-input-button">
+          <a class="button is-black" id="navbar-input-button">
             <span class="icon">
               <i class="fa fa-search"></i>
             </span>
           </a>
         </div>
       </div>
+      </div>
       <% if (!user) { %>
         <div class="navbar-item">
-          <a class="button is-primary" id="navbar-login-button" href="/login">
+          <div class="btn-wrapper">
+          <a class="button is-black" id="navbar-login-button" href="/login">
             <span class="icon">
               <i class="fa fa-user-circle-o"></i>
             </span>
             <span>LOGIN</span>
           </a>
+          </div>
         </div>
       <% } else { %>
         <div class="navbar-item">
-          <a class="button is-primary" id="navbar-login-button" href="/profile">
+          <a class="button is-black" id="navbar-login-button" href="/profile">
             <span class="icon">
               <i class="fa fa-user-circle-o"></i>
             </span>
