@@ -133,6 +133,43 @@ router.get("/api/users/:userid", function(req, res) {
     });
 });
 
+/**
+ * API Get Route, Finds Riffs by name
+ * @param  {Object} req [HTTP Request]
+ * @param  {[type]} res [HTTP Response, renders index.ejs]
+ */
+ router.get('/search/', function(req, res) {
+  db.Riffs
+    .findAll({
+      where: {
+        title: req.query.title 
+      },
+      include: [{
+        model: db.Favorites
+      }]
+    }).then(function(allRiffs) {
+      const resObj = allRiffs.map(riff => {
+        return Object.assign({}, {
+          id: riff.id,
+          title: riff.title,
+          sequence: riff.sequence,
+          tempo: 120,
+          beat_division: riff.beat_division,
+          favorites: riff.Favorites.map(favorite => {
+            return Object.assign({}, {
+              id: favorite.id,
+              user_id: favorite.UserId,
+            })
+          })
+        })
+      });
+      res.render("pages/index", {
+        riffs: resObj,
+        user: req.user
+      });
+    });
+ });
+
 // =======================================
 //             POST ROUTES
 // =======================================
@@ -164,6 +201,8 @@ router.post("/add_favorite", require("connect-ensure-login").ensureLoggedIn(), f
   }
   db.Favorites.create(newFavorite).then(function(result) {
     console.log("Added Favorite");
+  }).then(function() {
+    res.json({"complete" : "true"});
   });
 })
 
@@ -173,6 +212,8 @@ router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn()
       RiffId: req.body.riffId,
       userId: req.user.dataValues.id
     }
+  }).then(function() {
+    res.json({"complete" : "true"});
   });
 })
 

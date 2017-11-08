@@ -127,7 +127,7 @@ StartAudioContext(Tone.context, "article").then(function() {
 
     let riffId = $(this).data("id");
     $("#modal-title-input").val("New Riff");
-    
+
     if (riffId !== "") {
       let url = "/api/riffs/" + riffId;
       $.ajax({
@@ -213,9 +213,9 @@ StartAudioContext(Tone.context, "article").then(function() {
         Tone.Transport.start();
         setTimeout(function() {
           modalLoop.start(0.01);
-        }, 3);        
+        }, 3);
       }
-    }  else {    
+    }  else {
       if (modalLoop.state === "started") {
         modalLoop.stop(0.01);
         Tone.Transport.stop();
@@ -385,16 +385,6 @@ $("#publish-riff").on("click", function() {
   });
 });
 
-//toggling favorite star
-$(".favorite").on("click", function() {
-  if ($(this).hasClass("fa-star")) {
-    $(this).removeClass("fa-star");
-    $(this).addClass("fa-star-o");
-  } else {
-    $(this).removeClass("fa-star-o");
-    $(this).addClass("fa-star");
-  }
-});
 
 $(".favorite").on("click", function() {
   let riffId = 0;
@@ -402,17 +392,32 @@ $(".favorite").on("click", function() {
     riffId = $(this).closest(".modal").attr("data-id");
   else
     riffId = $(this).closest("article").attr("data-id");
-
-  let postBody = {
-    riffId: riffId
-  };
+  let $this =  $(this);
   if ($(this).hasClass("fa-star")) {
-    $.post("/add_favorite", postBody, function() {
-      console.log("FAV");
+    $.ajax({
+      url: "/remove_favorite",
+      method: "POST",
+      data: {
+        riffId: riffId
+      },
+      dataType: "json",
+      success: function(result) {
+        $this.removeClass("fa-star");
+        $this.addClass("fa-star-o");
+      }
     });
   } else {
-    $.post("/remove_favorite", postBody, function() {
-      console.log("UNFAV");
+    $.ajax({
+      url: "/add_favorite",
+      method: "POST",
+      data: {
+        riffId: riffId
+      },
+      dataType: "json",
+      success: function(result) {
+        $this.removeClass("fa-star-o");
+        $this.addClass("fa-star");
+      }
     });
   }
 });

@@ -8,19 +8,21 @@
   <div class="navbar-end">
     <div class="field is-grouped">
       <div class="navbar-item" id="navbar-input-item">
-      <div class="btn-wrapper">
+      <form method="GET" action="/search/">
+        <div class="btn-wrapper">
 
-        <div class="field has-addons">
-          <div class="control" id="navbar-input-control">
-            <input class="input" type="text" id="navbar-input" placeholder="Search Riffs..">
+          <div class="field has-addons">
+            <div class="control" id="navbar-input-control">
+              <input name="title" class="input" type="text" id="navbar-input" placeholder="Search Riffs..">
+            </div>
+            <button type="submit" class="button is-black" id="navbar-input-button">
+              <span class="icon">
+                <i class="fa fa-search"></i>
+              </span>
+            </button>
           </div>
-          <a class="button is-black" id="navbar-input-button">
-            <span class="icon">
-              <i class="fa fa-search"></i>
-            </span>
-          </a>
         </div>
-      </div>
+      </form>
       </div>
       <% if (!user) { %>
         <div class="navbar-item">
