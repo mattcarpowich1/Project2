@@ -35,6 +35,60 @@ let isPlaying = false;
 
 let colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 
+
+//INITIALIZE DRUMS
+var kick = new Tone.MembraneSynth({
+  pitchDecay: 0.01,
+  octaves: 5,
+  oscillator: {
+    type: "sine"
+  },
+  envelope: {
+    attack: 0.001,
+    decay: .1,
+    sustain: .5,
+    release: .25
+  }
+}).toMaster();
+kick.volume.value = -5;
+
+var snareNoise = new Tone.NoiseSynth({
+  noise: {
+    type: "brown"
+  },
+  envelope: {
+    attack: .005,
+    decay: .1625,
+    sustain: .05,
+    release: .5
+  }
+});
+
+var dist = new Tone.Distortion(0.8).toMaster();
+
+snareNoise.connect(dist);
+
+snareNoise.volume.value = -22;
+
+var cymbal = new Tone.MetalSynth({
+  frequency: 200,
+  envelope: {
+    attack: .001,
+    decay: .0625,
+    release: .125
+  },
+  harmonicity: 5,
+  modulationIndex: 32,
+  resonance: 4000,
+  octaves: 1.5
+}).toMaster();
+
+cymbal.volume.value = -25;
+
+var kickActive = false;
+var snareActive = false;
+var cymbalActive = false;
+
 Tone.Transport.start();
 
 $.ajax({
@@ -121,6 +175,22 @@ StartAudioContext(Tone.context, "article").then(function() {
 
       if (seq[modalStep] != " ") {
         modalSynth.triggerAttackRelease(seq[modalStep], "8n", time);
+      }
+
+      if (kickActive) {
+        if (modalStep % 2 === 0) {
+          kick.triggerAttackRelease("C2", "16n", time);
+        }
+      }
+
+      if (snareActive) {
+        if (modalStep % 2 === 0 && modalStep % 4 != 0) {
+          snareNoise.triggerAttackRelease("16n", time);
+        }
+      }
+
+      if (cymbalActive) {
+        cymbal.triggerAttackRelease("16n", time);
       }
 
       modalStep++;
@@ -256,6 +326,9 @@ StartAudioContext(Tone.context, "article").then(function() {
 //clear step when modal closes
 function clearModal() {
   $(".modal-step").each(function() {
+    kickActive = false;
+    snareActive = false;
+    cymbalActive = false;
     $(this).empty();
     $(this).addClass("unclicked");
     $(this).removeClass("clicked");
@@ -346,6 +419,21 @@ $(".p8-option").on("change", function() {
   $(`#${key}-step-selector`).attr("value", curVal + p8);
 });
 
+//Toggle Kick Drum
+$('#kick_button').on('click', function() {
+  kickActive = !kickActive;
+});
+
+//Toggle Snare Drum
+$('#snare_button').on('click', function() {
+  snareActive = !snareActive;
+});
+
+//Toggle Cymbal
+$('#cymbal_button').on('click', function() {
+  cymbalActive = !cymbalActive;
+});
+
 //takes in sequence from db and turns it into proper array
 function getStepArray(dbString) {
   let seq = dbString.split(",");
@@ -374,7 +462,6 @@ function defineTileLoop(id, seq, step, beat) {
     if (step >= seq.length) {
       step = 0;
     }
-    console.log(seq[step]);
     let prev = step === 0 ? 15 : step - 1;
     $(`#step-${id}-${prev}`).css("border-color", "black");
     $(`#step-${id}-${prev}`).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
