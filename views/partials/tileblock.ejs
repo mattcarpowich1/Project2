@@ -9,7 +9,7 @@
         <div class="tile-title">
           <div class="status-bar">
             <% if (i != -1) { %>
-            <i class="fa fa-star-o" id="favorite" aria-hidden="true"></i>
+            <i class="fa fa-star-o favorite" id="favorite" aria-hidden="true"></i>
             <% } %>
           </div>
           <p class="riff-title">
@@ -143,10 +143,10 @@
               <i class="fa fa-5 control-icon fa-play" aria-hidden="true"></i>
             </div>-->
             <div class="tile-controller">
-              <input class="controller-btn controller-play" type="radio" value="play"
+              <input class="controller-btn controller-play tile-controller-btn" type="radio" value="play"
                      name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>"
                      data-icon="►" data-id="<% if (i != -1) { %><%= riffs[i].id %><% } %>">
-              <input class="controller-btn controller-stop" type="radio" value="stop"
+              <input class="controller-btn controller-stop tile-controller-btn" type="radio" value="stop"
                      name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>"
                      data-icon="◼" data-id="<% if (i != -1) { %><%= riffs[i].id %><% } %>">
             </div>

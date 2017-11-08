@@ -76,15 +76,6 @@ nav {
   margin-left: 3px;
 }
 
-/****** GENERIC STEP STYLE ******/
-.step-grey{
-  background: grey;
-}
-
-.step-blue{
-  background: blue;
-}
-
 /****** TILE STYLES ******/
 article {
   padding: 0 !important;
@@ -173,7 +164,8 @@ article {
   padding: 6.5rem 10px 20px 10px;
 }
 
-.step-wrapper {
+.step-wrapper,
+.modal-step-wrapper {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -236,14 +228,15 @@ article {
   color: #818181;
 }
 
-.favorite:hover {
+.favorite:hover,
+.fa-star {
   color: #F0F8FF;
   cursor: pointer;
   text-shadow: 0 0 3px #F0F8FF;
 }
 
 .control-row {
-  margin: 20px 0 25px 0;
+  margin: 10px 0 15px 0;
   justify-content: center;
 }
 
@@ -269,6 +262,10 @@ article {
 }
 
 /****** MODAL STYLES ******/
+.modal-background {
+  background-color: hsla(0, 0%, 70%, 0.9) !important;
+}
+
 .modal-card {
   position: relative;
   background-color: hsla(0, 0%, 30%, 1);
@@ -327,12 +324,18 @@ input::placeholder {
 }
 
 /****** MODAL STEP GRID ******/
+.modal-step-wrapper {
+  width: 55px;
+  height: 55px;
+}
+
 .modal-step {
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   cursor: pointer;
   color: black;
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .modal-step:hover {
@@ -385,8 +388,24 @@ input::placeholder {
 }
 
 /****** MODAL NOTE SELECTOR ******/
+
+.table-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  /*border-radius: 50%;*/
+  background-image: -webkit-linear-gradient(top, #232323 0%, 
+                                            #4A4A4A 100%);
+  background-image: -webkit-gradient(linear, left top, 
+                                     left bottom, from(#232323), 
+                                     to(#4A4A4A));
+  padding: 5px;
+  margin: auto;
+}
+
 #modal-key-table {
-  margin-bottom: 13px;
+  margin-bottom: 0px;
 }
 
 .modal-key-table-head {
@@ -408,11 +427,15 @@ input::placeholder {
 }
 
 .step-selector:hover {
-  background-color: gold;
+  background-color: grey;
 }
 
 .picked {
   background-color: red;
+}
+
+.percussion-btn-div {
+  margin-top: 10px !important;
 }
 
 /****** NAVBAR STYLES ******/
@@ -442,6 +465,11 @@ input::placeholder {
   .step {
     width: 40px;
     height: 40px;
+  }
+
+  .modal-step-wrapper {
+    width: 48px;
+    height: 48px;
   }
 }
 
