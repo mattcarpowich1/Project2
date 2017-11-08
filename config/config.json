@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "testuser",
+    "username": "root",
     "password": "",
     "database": "sequencer_db",
     "host": "127.0.0.1",

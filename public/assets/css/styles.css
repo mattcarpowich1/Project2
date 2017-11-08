@@ -27,7 +27,7 @@ p {
 }
 
 .button {
-  color: #818181 !important;
+  color: #818181;
   box-shadow: 0 0 1px 1px rgb(10,10,10);
   background-image: linear-gradient(top, #383838 0%,
                                     #1F1F1F 5%, #161616 100%);
@@ -356,7 +356,7 @@ input::placeholder {
 }
 
 .clicked {
-  border: solid 3px red;
+  border: solid 3px hsla(217, 71%, 53%, 1);
 }
 
 /****** MODAL CONTROL BAR ******/
@@ -394,7 +394,6 @@ input::placeholder {
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  /*border-radius: 50%;*/
   background-image: -webkit-linear-gradient(top, #232323 0%, 
                                             #4A4A4A 100%);
   background-image: -webkit-gradient(linear, left top, 
@@ -431,11 +430,16 @@ input::placeholder {
 }
 
 .picked {
-  background-color: red;
+  background-color: hsla(217, 71%, 53%, 0.9);
 }
 
 .percussion-btn-div {
   margin-top: 10px !important;
+}
+
+.percussion-btn {
+  background-color: #B2B2B2;
+  background-image: none; 
 }
 
 /****** NAVBAR STYLES ******/

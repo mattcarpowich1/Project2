@@ -32,8 +32,6 @@ let activeRiffs = [];
 let loopsPlaying = [];
 let loopSteps = [];
 
-let isPlaying = false;
-
 let colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 
 
@@ -100,8 +98,6 @@ $.ajax({
 });
 
 StartAudioContext(Tone.context, "article").then(function() {
-  // let openPlay = false;
-
   //opens modal when click on tile
   $('article').on('click', function (evt) {
     if (evt.target.className.indexOf("controller-btn") > -1) return;
@@ -165,10 +161,7 @@ StartAudioContext(Tone.context, "article").then(function() {
   });
 
   function defineLoop(seq, beat) {
-    // keep track of which step in the sequence we're on
-    // let step = 0;
-
-    // create instrument
+    modalStep = 0;
     modalSynth = new Tone.PolySynth(8, Tone.Synth).toMaster();
 
     // initialize loop with parameters from riff
@@ -176,6 +169,7 @@ StartAudioContext(Tone.context, "article").then(function() {
       if (modalStep >= seq.length) {
         modalStep = 0;
       }
+
       $(".modal-step").each(function() {
         $(this).removeClass("active-step");
       });
@@ -205,38 +199,42 @@ StartAudioContext(Tone.context, "article").then(function() {
     }, `${beat}n`);
   }
 
-  $("#cn-button").on("click", function(event) {
-    let $wrap = $("#cn-wrapper");
-
-    if (modalLoop.state === "started") {
-      isPlaying = false;
-      modalLoop.stop(0.01);
-      Tone.Transport.stop();
-      $wrap.removeClass("opened-nav");
-      toggleStart("modal-control-icon", isPlaying);
-    } else {
-      Tone.Transport.start();
-      setTimeout(function() {
-        modalLoop.start(0.01);
-        isPlaying = true;
-        toggleStart("modal-control-icon", isPlaying);
-      }, 3);
-      $wrap.addClass("opened-nav");
-    }
+  $(".modal-radio").on("click", function(event) {
+    if ($(this).val() === 'play') {
+      if (modalLoop !== undefined) {
+        if (modalLoop.state !== "started") {
+          // defineLoop(modalSequence, modalBeat);
+          modalStep = 0;
+          Tone.Transport.start();
+          setTimeout(function() {
+            modalLoop.start(0.01);
+          }, 3);
+        }
+      } else {
+        // defineLoop(modalSequence, modalBeat);
+        modalStep = 0;
+        Tone.Transport.start();
+        setTimeout(function() {
+          modalLoop.start(0.01);
+        }, 3);        
+      }
+    }  else {    
+      if (modalLoop.state === "started") {
+        modalLoop.stop(0.01);
+        Tone.Transport.stop();
+      } 
+    } 
   });
 
   $(".modal-beat-sel").on("click", function() {
     modalLoop.stop(0.01);
     Tone.Transport.stop();
-    isPlaying = false;
     modalBeat = $(this).data("id");
-    $(".csstransforms .cn-wrapper li a").addClass("is-beat");
     modalLoop = undefined;
     defineLoop(modalSequence, modalBeat);
     Tone.Transport.start();
     setTimeout(function() {
       modalLoop.start(0.01);
-      isPlaying = true;
     }, 3);
   });
 
@@ -263,20 +261,16 @@ StartAudioContext(Tone.context, "article").then(function() {
   $(".close-modal").on("click", function() {
     $(".modal").removeClass("is-active");
     clearModal();
-    modalLoop.stop(0.01);
-    modalLoop = null;
-    isPlaying = false;
-    toggleStart("modal-control-icon", isPlaying);
+    if (modalLoop !== undefined) modalLoop.stop(0.01);
+    modalLoop = undefined;
   });
 
   //closes modal if clicking off of modal
   $(".modal-background").on("click", function() {
     $(".modal").removeClass("is-active");
     clearModal();
-    modalLoop.stop(0.01);
-    modalLoop = null;
-    isPlaying = false;
-    toggleStart("modal-control-icon", isPlaying);
+    if (modalLoop !== undefined) modalLoop.stop(0.01);
+    modalLoop = undefined;
   });
 
   //pick which notes are sent to steps
@@ -344,8 +338,7 @@ function clearModal() {
   $(".step-selector").each(function() {
     $(this).removeClass("picked");
   });
-  let $wrap = $("#cn-wrapper");
-  $wrap.removeClass("opened-nav");
+  modalStep = 0;
   modalSequence = [
     " ",
     " ",
@@ -367,14 +360,13 @@ function clearModal() {
   $(".modal-step").each(function() {
     $(this).removeClass("active-step");
   });
-  $.each($(".step"), function() {
-    $(this).css("border-color", "black");
-    $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
-  });
+  // $.each($(".step"), function() {
+  //   $(this).css("border-color", "black");
+  //   $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
+  // });
 }
 
 $("#publish-riff").on("click", function() {
-  console.log("HERE");
   let sequenceString = JSON.stringify(modalSequence);
   let newRiff = {
     title: $("#modal-title-input").val().trim(),
@@ -466,14 +458,6 @@ function getStepArray(dbString) {
   });
 
   return seq;
-}
-
-//toggle start/stop button
-function toggleStart(id, started) {
-  let active = started ? "fa-stop" : "fa-play";
-  let inactive = started ? "fa-play" : "fa-stop";
-  $(`#${id}`).removeClass(inactive);
-  $(`#${id}`).addClass(active);
 }
 
 function defineTileLoop(id, seq, step, beat) {
