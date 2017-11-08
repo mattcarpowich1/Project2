@@ -333,12 +333,12 @@ function defineTileLoop(id, seq, step, beat) {
     if (step >= seq.length) {
       step = 0;
     }
-    console.log(seq[step]);
-    let prev = step === 0 ? 15 : step - 1;
-    $(`#step-${id}-${prev}`).css('border-color', 'black');
-    $(`#step-${id}-${prev}`).css('box-shadow', '0 0 1px 1px rgb(10,10,10)');
-    $(`#step-${id}-${step}`).css('border-color', `${getColor(seq[step][0])}`);
-    $(`#step-${id}-${step}`).css('box-shadow', `0 0 20px 5px ${getColor(seq[step][0])}`);
+    // console.log(seq[step]);
+    // let prev = step === 0 ? 15 : step - 1;
+    // $(`#step-${id}-${prev}`).css('border-color', 'black');
+    // $(`#step-${id}-${prev}`).css('box-shadow', '0 0 1px 1px rgb(10,10,10)');
+    // $(`#step-${id}-${step}`).css('border-color', `${getColor(seq[step][0])}`);
+    // $(`#step-${id}-${step}`).css('box-shadow', `0 0 20px 5px ${getColor(seq[step][0])}`);
 
     if (seq[step] != " ") {
       tileSynth.triggerAttackRelease(seq[step], "8n", time);
