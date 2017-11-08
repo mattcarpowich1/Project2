@@ -82,7 +82,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       num_steps: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1, 2],
           // allow between a 1 and 16 step sequence
@@ -100,7 +100,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       theme: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1],
           isValidString: function(value) {
@@ -115,7 +115,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       sound: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1],
           // custom validation to ensure that value is a string
@@ -131,7 +131,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       key_note: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1],
           // must be one of the following values
@@ -143,7 +143,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       num_voices: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1],
           // Allow between 1 and 16 voices
