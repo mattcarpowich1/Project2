@@ -12,7 +12,7 @@
 </head>
 <body>
   <% include ../partials/navbar %>
-  <section class="hero is-success is-fullheight">
+  <section class="hero is-fullheight">
     <div class="hero-body">
       <div class="container has-text-centered">
         <div class="column is-4 is-offset-4">
@@ -21,21 +21,22 @@
           <div class="box">
             <figure class="avatar">
             <!-- <img src="https://placehold.it/128x128"> -->
-              <div id="avatar-div"></div>
+              <div id="avatar-div" class="step"></div>
             </figure>
             <form action="/login" method="post">
-	<div>
-	<label>Username:</label>
-	<input class="input is-large" type="text" name="username"/><br/>
-	</div>
-	<div>
-	<label>Password:</label>
-	<input class="input is-large" type="password" name="password"/>
-	</div>
-	<div>
-	<input class="input is-large" type="submit" value="Submit"/>
-	</div>
-</form>
+            	<div>
+            	 <label>Username:</label>
+            	 <input class="input is-large" type="text" name="username"/><br/>
+            	</div>
+            	<div>
+            	 <label>Password:</label>
+            	 <input class="input is-large" type="password" name="password"/>
+            	</div>
+            	<div>
+            	 <!-- <input class="input is-large" type="submit" value="Submit"/> -->
+               <button type="submit" class="button is-block is-info is-large">Submit</button>
+            	</div>
+            </form>
             <!-- <form>
               <div class="field">
                 <div class="control">
@@ -68,6 +69,5 @@
   </section>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script async type="text/javascript" src="/assets/js/script.js"></script>
 <script async type="text/javascript" src="/assets/js/login.js"></script>
 </html>

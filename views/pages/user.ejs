@@ -12,7 +12,7 @@
 </head>
 <body>
   <% include ../partials/navbar %>
-  <section class="hero is-success is-fullheight">
+  <section class="hero is-fullheight">
     <div class="hero-body">
       <div class="container has-text-centered">
         <div class="column is-4 is-offset-4">
@@ -21,7 +21,7 @@
           <div class="box">
             <figure class="avatar">
             <!-- <img src="https://placehold.it/128x128"> -->
-              <div id="avatar-div"></div>
+              <div id="avatar-div" class="step"></div>
             </figure>
             <form action="/api/users/new" method="post">
               <div class="field">
@@ -47,7 +47,7 @@
                 </div>
               </div>
 
-              <input type="submit" class="button is-block is-info is-large">Sign Up</input>
+              <button type="submit" class="button is-block is-info is-large">Sign Up</button>
             </form>
           </div>
         </div>
@@ -56,6 +56,5 @@
   </section>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script async type="text/javascript" src="/assets/js/script.js"></script>
 <script async type="text/javascript" src="/assets/js/login.js"></script>
 </html>

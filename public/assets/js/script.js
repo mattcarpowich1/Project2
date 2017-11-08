@@ -7,10 +7,25 @@ let modalStep = 0;
 let step = 0;
 let modalSynth;
 //use these to update/insert db
-let modalSequence = [' ', ' ', ' ', ' ',
-                     ' ', ' ', ' ', ' ',
-                     ' ', ' ', ' ', ' ',
-                     ' ', ' ', ' ', ' '];
+let modalSequence = [
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " ",
+  " "
+];
+>>>>>>> ee7c98e16da50fa4b2bbd6826957209d2c81f99a
 let modalBeat = 8;
 
 let activeRiffs = [];
@@ -19,8 +34,7 @@ let loopSteps = [];
 
 let isPlaying = false;
 
-let colors = ['red', 'orange', 'yellow', 'green',
-              'blue', 'indigo', 'violet'];
+let colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 
 
 //INITIALIZE DRUMS
@@ -79,7 +93,7 @@ var cymbalActive = false;
 Tone.Transport.start();
 
 $.ajax({
-  url: '/api/riffs/all',
+  url: "/api/riffs/all",
   method: "GET"
 }).done(function(riffs) {
   allRiffs = riffs;
@@ -91,16 +105,13 @@ StartAudioContext(Tone.context, "article").then(function() {
   //opens modal when click on tile
   $('article').on('click', function (evt) {
 
-    // if (evt.target.id === 'favorite') return;
-    // if (evt.target.className.indexOf('fa') > -1) return;
-    // if (evt.target.className.indexOf('control-play') > -1) return;
-    if (evt.target.className.indexOf('controller-btn') > -1) return;
+    if (evt.target.className.indexOf("controller-btn") > -1) return;
     if (loopsPlaying[0] != null) {
-      loopsPlaying[0].stop(.01);
+      loopsPlaying[0].stop(0.01);
       loopsPlaying[0] = null;
     }
     if (loopsPlaying[1] != null) {
-      loopsPlaying[1].stop(.01);
+      loopsPlaying[1].stop(0.01);
       loopsPlaying[1] = null;
     }
 
@@ -110,17 +121,23 @@ StartAudioContext(Tone.context, "article").then(function() {
     loopSteps = [];
     resetRadio();
 
-    $('.modal').addClass('is-active');
-    
-    let riffId = $(this).data('id');
+    if (!$(this).data('authored')) {
+      $('footer').hide();
+    } else {
+      $('footer').show();
+    }
 
-    if (riffId !== '') {
+    $(".modal").addClass("is-active");
 
-      let url = '/api/riffs/' + riffId;
+    let riffId = $(this).data("id");
+
+    if (riffId !== "") {
+      let url = "/api/riffs/" + riffId;
       $.ajax({
         url: url,
         method: "GET"
       }).done(function(riff) {
+
         // set tempo to riff's tempo
         Tone.Transport.bpm.value = 120;
 
@@ -129,24 +146,24 @@ StartAudioContext(Tone.context, "article").then(function() {
         modalBeat = riff.beat_division;
 
         //set riff name
-        $('#modal-title-input').attr('placeholder', riff.title);
-      
-        $.each($('.modal-step'), function(index, value) {
+        $("#modal-title-input").attr("placeholder", riff.title);
+
+        $.each($(".modal-step"), function(index, value) {
           $(this).text(modalSequence[index]);
         });
         defineLoop(modalSequence, modalBeat);
       });
     } else {
-      $.each($('.modal-step'), function(index, value) {
+      $.each($(".modal-step"), function(index, value) {
         $(this).text(modalSequence[index]);
       });
       defineLoop(modalSequence, modalBeat);
-      $('#modal-title-input').attr('placeholder', 'New Riff');
+      $("#modal-title-input").attr("placeholder", "New Riff");
     }
   });
 
-  function defineLoop (seq, beat) { 
-   // keep track of which step in the sequence we're on
+  function defineLoop(seq, beat) {
+    // keep track of which step in the sequence we're on
     // let step = 0;
 
     // create instrument
@@ -157,10 +174,10 @@ StartAudioContext(Tone.context, "article").then(function() {
       if (modalStep >= seq.length) {
         modalStep = 0;
       }
-      $('.modal-step').each(function () {
-        $(this).removeClass('active-step');
+      $(".modal-step").each(function() {
+        $(this).removeClass("active-step");
       });
-      $(`#modal-step-${modalStep}`).addClass('active-step');
+      $(`#modal-step-${modalStep}`).addClass("active-step");
 
       if (seq[modalStep] != " ") {
         modalSynth.triggerAttackRelease(seq[modalStep], "8n", time);
@@ -183,38 +200,35 @@ StartAudioContext(Tone.context, "article").then(function() {
       }
 
       modalStep++;
-
     }, `${beat}n`);
-  };
+  }
 
   $("#cn-button").on("click", function(event) {
-    
-    let $wrap = $('#cn-wrapper');
+    let $wrap = $("#cn-wrapper");
 
     if (modalLoop.state === "started") {
       isPlaying = false;
-      modalLoop.stop(.01);
+      modalLoop.stop(0.01);
       Tone.Transport.stop();
-      $wrap.removeClass('opened-nav');
-      toggleStart('modal-control-icon', isPlaying);
+      $wrap.removeClass("opened-nav");
+      toggleStart("modal-control-icon", isPlaying);
     } else {
       Tone.Transport.start();
       setTimeout(function() {
         modalLoop.start(0.01);
         isPlaying = true;
-        toggleStart('modal-control-icon', isPlaying);
+        toggleStart("modal-control-icon", isPlaying);
       }, 3);
-      $wrap.addClass('opened-nav');
+      $wrap.addClass("opened-nav");
     }
-
   });
 
-  $('.modal-beat-sel').on('click', function () {
-    modalLoop.stop(.01);
+  $(".modal-beat-sel").on("click", function() {
+    modalLoop.stop(0.01);
     Tone.Transport.stop();
     isPlaying = false;
-    modalBeat = $(this).data('id');
-    $('.csstransforms .cn-wrapper li a').addClass('is-beat');
+    modalBeat = $(this).data("id");
+    $(".csstransforms .cn-wrapper li a").addClass("is-beat");
     modalLoop = undefined;
     defineLoop(modalSequence, modalBeat);
     Tone.Transport.start();
@@ -225,8 +239,8 @@ StartAudioContext(Tone.context, "article").then(function() {
   });
 
   // Play the sequence that was clicked
-  $('.controller-btn').on('click', function(event) {
-    let id = $(this).data('id');
+  $(".controller-btn").on("click", function(event) {
+    let id = $(this).data("id");
     let index;
 
     for (let i = 0; i < allRiffs.length; i++) {
@@ -235,146 +249,180 @@ StartAudioContext(Tone.context, "article").then(function() {
         break;
       }
     }
-    handlePlay(id, index,
-               $(this).hasClass('controller-play'),
-               $(this).hasClass('controller-stop'));
+    handlePlay(
+      id,
+      index,
+      $(this).hasClass("controller-play"),
+      $(this).hasClass("controller-stop")
+    );
   });
 
-  //closes modal if clicking elements that have class 
-  $('.close-modal').on('click', function () {
-    $('.modal').removeClass('is-active');
+  //closes modal if clicking elements that have class
+  $(".close-modal").on("click", function() {
+    $(".modal").removeClass("is-active");
     clearModal();
-    modalLoop.stop(.01);
+    modalLoop.stop(0.01);
     modalLoop = null;
     isPlaying = false;
-    toggleStart('modal-control-icon', isPlaying);
+    toggleStart("modal-control-icon", isPlaying);
   });
 
   //closes modal if clicking off of modal
-  $('.modal-background').on('click', function () {
-    $('.modal').removeClass('is-active');
+  $(".modal-background").on("click", function() {
+    $(".modal").removeClass("is-active");
     clearModal();
-    modalLoop.stop(.01);
+    modalLoop.stop(0.01);
     modalLoop = null;
     isPlaying = false;
-    toggleStart('modal-control-icon', isPlaying);
+    toggleStart("modal-control-icon", isPlaying);
   });
 
   //pick which notes are sent to steps
-  $('.step-selector').on('click', function () {
+  $(".step-selector").on("click", function() {
     let that = this;
 
-    if ($(this).hasClass('picked')) {
-      $(this).removeClass('picked');
+    if ($(this).hasClass("picked")) {
+      $(this).removeClass("picked");
     } else {
-      $.each($(".picked"), function () {
-        $(this).removeClass('picked');
-      });	
-      $(this).addClass('picked');
+      $.each($(".picked"), function() {
+        $(this).removeClass("picked");
+      });
+      $(this).addClass("picked");
     }
 
-    if ($('#step-grid').find('.clicked').length !== 0) {
-      $('.clicked').each(function () {
-        $(this).html($(that).attr('value'));
-        $(this).val($(that).attr('value'));
-        modalSequence[parseInt($(this).data('id'))] = $(that).attr('value');
-        $(this).removeClass('clicked');
-        $(this).addClass('unclicked');
-        $(that).removeClass('picked');
+    if ($("#step-grid").find(".clicked").length !== 0) {
+      $(".clicked").each(function() {
+        $(this).html($(that).attr("value"));
+        $(this).val($(that).attr("value"));
+        modalSequence[parseInt($(this).data("id"))] = $(that).attr("value");
+        $(this).removeClass("clicked");
+        $(this).addClass("unclicked");
+        $(that).removeClass("picked");
       });
     }
   });
 
   //steps clicked
-  $('.modal-step').on('click', function () {
-    if ($(this).hasClass('unclicked')) {
-      $(this).removeClass('unclicked');
-      $(this).addClass('clicked');
+  $(".modal-step").on("click", function() {
+    if ($(this).hasClass("unclicked")) {
+      $(this).removeClass("unclicked");
+      $(this).addClass("clicked");
 
-      if ($('.picked').attr('value') !== undefined) {
-        $(this).html($('.picked').attr('value'));
-        $(this).val($('.picked').attr('value'));
-        modalSequence[parseInt($(this).data('id'))] = $('.picked').attr('value');
-        $(this).addClass('unclicked');
-        $(this).removeClass('clicked');
+      if ($(".picked").attr("value") !== undefined) {
+        $(this).html($(".picked").attr("value"));
+        $(this).val($(".picked").attr("value"));
+        modalSequence[parseInt($(this).data("id"))] = $(".picked").attr(
+          "value"
+        );
+        $(this).addClass("unclicked");
+        $(this).removeClass("clicked");
       } else {
-        if ($(this).html() !== '') {
+        if ($(this).html() !== "") {
           $(this).empty();
-          modalSequence[parseInt($(this).data('id'))] = ' ';
+          modalSequence[parseInt($(this).data("id"))] = " ";
         }
       }
     } else {
-      $(this).removeClass('clicked');
-      $(this).addClass('unclicked');		
+      $(this).removeClass("clicked");
+      $(this).addClass("unclicked");
     }
   });
-
 });
 
 //clear step when modal closes
 function clearModal() {
-  kickActive = false;
-  snareActive = false;
-  cymbalActive = false;
-  $('.modal-step').each(function () {
+  $(".modal-step").each(function() {
+    kickActive = false;
+    snareActive = false;
+    cymbalActive = false;
     $(this).empty();
-    $(this).addClass('unclicked');
-    $(this).removeClass('clicked');
+    $(this).addClass("unclicked");
+    $(this).removeClass("clicked");
   });
-  $('.step-selector').each(function () {
-    $(this).removeClass('picked');
+  $(".step-selector").each(function() {
+    $(this).removeClass("picked");
   });
-  let $wrap = $('#cn-wrapper');
-  $wrap.removeClass('opened-nav');
-  modalSequence = [' ', ' ', ' ', ' ',
-                   ' ', ' ', ' ', ' ',
-                   ' ', ' ', ' ', ' ',
-                   ' ', ' ', ' ', ' '];
-  $('.modal-step').each(function () {
-    $(this).removeClass('active-step');
+  let $wrap = $("#cn-wrapper");
+  $wrap.removeClass("opened-nav");
+  modalSequence = [
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " "
+  ];
+  $(".modal-step").each(function() {
+    $(this).removeClass("active-step");
   });
-  $.each($('.step'), function () {
-    $(this).css('border-color', 'black');
-    $(this).css('box-shadow', '0 0 1px 1px rgb(10,10,10)');
+  $.each($(".step"), function() {
+    $(this).css("border-color", "black");
+    $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
   });
 }
 
+$("#publish-riff").on("click", function() {
+  console.log("HERE");
+  let sequenceString = JSON.stringify(modalSequence);
+  let newRiff = {
+    title: $("#modal-title-input").val().trim(),
+    sequence: sequenceString,
+    beat_division: modalBeat,
+  };
+  $.post("/api/riffs/new", newRiff, function() {
+    console.log("THERE");
+    window.location.href = "/";
+  });
+});
+
 //toggling favorite star
-$('.favorite').on('click', function () {
-  if ($(this).hasClass('fa-star')) {
-    $(this).removeClass('fa-star');
-    $(this).addClass('fa-star-o');
+$(".favorite").on("click", function() {
+  if ($(this).hasClass("fa-star")) {
+    $(this).removeClass("fa-star");
+    $(this).addClass("fa-star-o");
   } else {
-    $(this).removeClass('fa-star-o');
-    $(this).addClass('fa-star');
+    $(this).removeClass("fa-star-o");
+    $(this).addClass("fa-star");
   }
 });
 
 //altering to sharps and flats
-$('.mod-check').on('click', function () {
-  let key = $(this).attr('id')[0];
-  let mod = $(this).attr('id')[1];
+$(".mod-check").on("click", function() {
+  let key = $(this).attr("id")[0];
+  let mod = $(this).attr("id")[1];
   let val = `${key}${mod}`;
   let p8 = $(`#${key}-p8-option`).val();
 
-  if ($(`#${val}-check`).prop('checked')) {
-    if (mod === 'b') $(`#${key}s-check`).prop('checked', false);
-    else $(`#${key}b-check`).prop('checked', false);
+  if ($(`#${val}-check`).prop("checked")) {
+    if (mod === "b") $(`#${key}s-check`).prop("checked", false);
+    else $(`#${key}b-check`).prop("checked", false);
 
-    if (mod === 's') val = key + '#';
+    if (mod === "s") val = key + "#";
   } else {
     val = key;
   }
 
-  $(`#${key}-step-selector`).attr('value', `${val}${p8}`);
+  $(`#${key}-step-selector`).attr("value", `${val}${p8}`);
 });
 
 //changing octaves
-$('.p8-option').on('change', function () {
+$(".p8-option").on("change", function() {
   let p8 = $(this).val();
-  let key = $(this).attr('id')[0];
-  let curVal = $(`#${key}-step-selector`).attr('value').slice(0,-1);
-  $(`#${key}-step-selector`).attr('value', curVal+p8);
+  let key = $(this).attr("id")[0];
+  let curVal = $(`#${key}-step-selector`)
+    .attr("value")
+    .slice(0, -1);
+  $(`#${key}-step-selector`).attr("value", curVal + p8);
 });
 
 //Toggle Kick Drum
@@ -393,22 +441,30 @@ $('#cymbal_button').on('click', function() {
 });
 
 //takes in sequence from db and turns it into proper array
+<<<<<<< HEAD
 function getStepArray (dbString) {
+=======
+function getStepArray(dbString) {
+>>>>>>> ee7c98e16da50fa4b2bbd6826957209d2c81f99a
   let seq = dbString.split(",");
 
   seq[0] = seq[0].slice(1);
-  seq[seq.length-1] = seq[seq.length-1].slice(0, -1);
+  seq[seq.length - 1] = seq[seq.length - 1].slice(0, -1);
   seq.forEach((el, i) => {
+<<<<<<< HEAD
     seq[i] = el.trim().slice(1,-1);
+=======
+    seq[i] = el.trim().slice(1, -1);
+>>>>>>> ee7c98e16da50fa4b2bbd6826957209d2c81f99a
   });
 
   return seq;
 }
 
 //toggle start/stop button
-function toggleStart (id, started) {
-  let active = started ? 'fa-stop' : 'fa-play';
-  let inactive = started ? 'fa-play' : 'fa-stop';
+function toggleStart(id, started) {
+  let active = started ? "fa-stop" : "fa-play";
+  let inactive = started ? "fa-play" : "fa-stop";
   $(`#${id}`).removeClass(inactive);
   $(`#${id}`).addClass(active);
 }
@@ -417,60 +473,77 @@ function defineTileLoop(id, seq, step, beat) {
   let tileSynth = new Tone.PolySynth(2, Tone.Synth).toMaster();
   step = 0;
   let loop = new Tone.Loop(function(time) {
-
     if (step >= seq.length) {
       step = 0;
     }
-    
+
     let prev = step === 0 ? 15 : step - 1;
-    $(`#step-${id}-${prev}`).css('border-color', 'black');
-    $(`#step-${id}-${prev}`).css('box-shadow', '0 0 1px 1px rgb(10,10,10)');
-    $(`#step-${id}-${step}`).css('border-color', `${getColor(seq[step][0])}`);
-    $(`#step-${id}-${step}`).css('box-shadow', `0 0 20px 5px ${getColor(seq[step][0])}`);
+    $(`#step-${id}-${prev}`).css("border-color", "black");
+    $(`#step-${id}-${prev}`).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
+    $(`#step-${id}-${step}`).css("border-color", `${getColor(seq[step][0])}`);
+    $(`#step-${id}-${step}`).css(
+      "box-shadow",
+      `0 0 20px 5px ${getColor(seq[step][0])}`
+    );
 
     if (seq[step] != " ") {
       tileSynth.triggerAttackRelease(seq[step], "8n", time);
     }
 
     step++;
-
   }, `${beat}n`);
   return loop;
-};
+}
 
 function getColor(note) {
   switch (note) {
-    case 'C': return colors[0]; break;
-    case 'D': return colors[1]; break;
-    case 'E': return colors[2]; break;
-    case 'F': return colors[3]; break;
-    case 'G': return colors[4]; break;
-    case 'A': return colors[5]; break;
-    case 'B': return colors[6]; break;
-    default: return 'white'; break;
+    case "C":
+      return colors[0];
+      break;
+    case "D":
+      return colors[1];
+      break;
+    case "E":
+      return colors[2];
+      break;
+    case "F":
+      return colors[3];
+      break;
+    case "G":
+      return colors[4];
+      break;
+    case "A":
+      return colors[5];
+      break;
+    case "B":
+      return colors[6];
+      break;
+    default:
+      return "white";
+      break;
   }
-}; 
+}
 
 //removes last element from arrays
 function popActiveLoop() {
   loopsPlaying.pop();
   activeRiffs.pop();
-  loopSteps.pop();  
-};
+  loopSteps.pop();
+}
 
 //removes first element from arrays
 function sliceActiveLoop() {
   loopsPlaying.slice(1);
   activeRiffs.slice(1);
   loopSteps.slice(1);
-};
+}
 
 //removes arbitrary element from array
 function spliceActiveLoop(index) {
   loopsPlaying.splice(index, 1);
   activeRiffs.splice(index, 1);
   loopSteps.splice(index, 1);
-};
+}
 
 //Saves loop in arrays
 function pushActiveLoop(id, seq, beat) {
@@ -478,18 +551,18 @@ function pushActiveLoop(id, seq, beat) {
   loopSteps.push(0);
   let loop = defineTileLoop(id, seq, loopSteps[loopSteps.length - 1], beat);
   loopsPlaying.push(loop);
-};
+}
 
 //resete the tile play/stop buttons
 function resetRadio(ref = null) {
   if (ref === null) {
-    $(`input[type="radio"]`).each( function () {
-      $(this).prop('checked', false);
+    $(`input[type="radio"]`).each(function() {
+      $(this).prop("checked", false);
     });
   } else {
-   $(`input[name="radio-${ref}"][value="play"]`).prop('checked', false);
+    $(`input[name="radio-${ref}"][value="play"]`).prop("checked", false);
   }
-};
+}
 
 //main screen play button handler
 function handlePlay(id, index, hitPlay, hitStop) {
@@ -503,11 +576,11 @@ function handlePlay(id, index, hitPlay, hitStop) {
   //generic look to stop associated id
   if (hitStop) {
     if (ref > -1) {
-      loopsPlaying[ref].stop(.01);
+      loopsPlaying[ref].stop(0.01);
       spliceActiveLoop(ref);
-      $.each($('.step'), function () {
-        $(this).css('border-color', 'black');
-        $(this).css('box-shadow', '0 0 1px 1px rgb(10,10,10)');
+      $.each($(".step"), function() {
+        $(this).css("border-color", "black");
+        $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
       });
     }
   } else {
@@ -521,19 +594,19 @@ function handlePlay(id, index, hitPlay, hitStop) {
       if (ref === -1) {
         //stop and remove last playing loop
         resetRadio(activeRiffs[activeRiffs.length - 1]);
-        loopsPlaying[activeRiffs.length - 1].stop(.01);
-        popActiveLoop();  
+        loopsPlaying[activeRiffs.length - 1].stop(0.01);
+        popActiveLoop();
 
-        $.each($('.step'), function () {
-          $(this).css('border-color', 'black');
-          $(this).css('box-shadow', '0 0 1px 1px rgb(10,10,10)');
-        });    
+        $.each($(".step"), function() {
+          $(this).css("border-color", "black");
+          $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
+        });
 
         //start clicked loop
         pushActiveLoop(id, seq, beat);
         Tone.Transport.start();
-        loopsPlaying[activeRiffs.length - 1].start(0.01);  
-      }    
+        loopsPlaying[activeRiffs.length - 1].start(0.01);
+      }
     }
   }
 
@@ -683,7 +756,7 @@ function handlePlay(id, index, hitPlay, hitStop) {
 
   // // if no loops are playing
   // if (!done && (loopsPlaying[0] === null && loopsPlaying[1] === null)) {
-  //   // if an active riff was clicked  
+  //   // if an active riff was clicked
   //   if (activeRiffs.indexOf(id) > -1) {
   //     let activeIndex = activeRiffs.indexOf(id);
   //     if (activeIndex === 0) {
@@ -715,7 +788,6 @@ function handlePlay(id, index, hitPlay, hitStop) {
   //         synth2 = new Tone.PolySynth(2, Tone.Synth).toMaster();
   //       }
 
-
   //       let loop2 = new Tone.Loop(function(time) {
   //         if (loop2Step >= seq.length) {
   //           loop2Step = 0;
@@ -735,7 +807,6 @@ function handlePlay(id, index, hitPlay, hitStop) {
   //       loopsPlaying[activeIndex].start(.01);
   //       done = true;
   //       return false;
-
 
   //     }
   //   } else {

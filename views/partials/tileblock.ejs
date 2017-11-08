@@ -1,7 +1,7 @@
 <% for (var i = -1; i < riffs.length; i++) { %>
 <div class="column is-mobile is-half-tablet is-one-quarter-desktop">
   <div class="tile is-parent">
-    <article class="tile is-child box tile-riff" data-id="<% if (i != -1) { %><%= riffs[i].id %><% } %>">
+    <article class="tile is-child box tile-riff" data-id="<% if (riffs && i != -1) { %><%= riffs[i].id %><% } %>" data-authored="<% if (!user) { %>0<% } else { if (riffs[i]) { if (user.id === riffs[i].UserId) { %>1<% } else { %>0<% } } else { %>1<% } }%>">
       <div class="overlay <% if (i != -1) { %> is-riff <% } %>">
         <div class="overlay-text"> + </div>
       </div>
@@ -20,7 +20,7 @@
           <div class="columns is-flex">
             <div class="column is-3">
               <div class="step-wrapper">
-                <div class="step step-0" 
+                <div class="step step-0"
                      id="step-<% if (i != -1) { %><%= riffs[i].id %><% } %>-0">
                 </div>
               </div>
@@ -144,10 +144,10 @@
             </div>-->
             <div class="tile-controller">
               <input class="controller-btn controller-play" type="radio" value="play"
-                     name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>" 
+                     name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>"
                      data-icon="►" data-id="<% if (i != -1) { %><%= riffs[i].id %><% } %>">
               <input class="controller-btn controller-stop" type="radio" value="stop"
-                     name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>" 
+                     name="radio-<% if (i != -1) { %><%= riffs[i].id %><% } %>"
                      data-icon="◼" data-id="<% if (i != -1) { %><%= riffs[i].id %><% } %>">
             </div>
           </div>
