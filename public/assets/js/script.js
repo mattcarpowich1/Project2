@@ -11,7 +11,7 @@ let modalSequence = [' ', ' ', ' ', ' ',
                      ' ', ' ', ' ', ' ',
                      ' ', ' ', ' ', ' ',
                      ' ', ' ', ' ', ' '];
-let modalBeat = 8; 
+let modalBeat = 8;
 
 let activeRiffs = [];
 let loopsPlaying = [];
