@@ -462,7 +462,8 @@ input::placeholder {
 }
 
 .percussion-btn-div {
-  margin-top: 10px !important;
+  margin-top: 15px !important;
+  margin-bottom: 0 !important;
 }
 
 .percussion-btn {
@@ -473,6 +474,10 @@ input::placeholder {
 .percussion-btn:hover {
   z-index: 2;
   box-shadow: 0 0 10px 0px #fff;
+}
+
+#beat-slide-container {
+  margin: auto;
 }
 
 /****** NAVBAR STYLES ******/
@@ -622,3 +627,46 @@ input[type="radio"]:checked:hover:before {
   );
 }
 
+/****** SLIDER ******/
+
+input[type="range"] {
+  -webkit-appearance: none; 
+  outline: none;
+  width: auto;
+  height: 5px;
+  border-radius: 1px;
+  position: relative;
+  background-color: #000;
+  -webkit-background-clip: padding-box;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  cursor: ew-resize;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; 
+  position: relative;
+  z-index: 1;
+  width: 10px;
+  height: 20px;
+  border-radius: 1px / 2px ;
+  
+  background-image: -webkit-gradient( linear, left top, right top,
+    color-stop( 0,    hsl(0,0%,15%) ), 
+    color-stop( .16,  hsl(0,0%,22%) ), 
+    color-stop( .18,  hsl(0,0%,30%) ), 
+    color-stop( .2,   hsl(0,0%,26%) ), 
+    
+    color-stop( .42,  hsl(217,60%,30%) ), 
+    color-stop( .44,  hsl(217,0%,15%) ),
+    color-stop( .46,  hsl(217,100%,50%) ), 
+    color-stop( .54,  hsl(217,100%,50%) ), 
+    color-stop( .56,  hsl(217,0%,15%) ), 
+    color-stop( .58,  hsl(217,60%,30%) ), 
+    
+    color-stop( .8,   hsl(0,0%,26%) ),
+    color-stop( .82,  hsl(0,0%,30%) ), 
+    color-stop( .84,  hsl(0,0%,22%) ), 
+    color-stop( 1,    hsl(0,0%,15%) ) 
+  );
+}
