@@ -38,7 +38,8 @@ router.get("/", function(req, res) {
     });
     res.render("pages/index", {
       riffs: resObj,
-      user: req.user
+      user: req.user,
+      filter: "none"
     });
   });
 });
@@ -128,7 +129,8 @@ router.get("/api/users/:userid", function(req, res) {
       });
       res.render("pages/index", {
         riffs: resObj,
-        user: req.user
+        user: req.user,
+        filter: {type: "user"}
       });
     });
 });
