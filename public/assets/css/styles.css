@@ -207,7 +207,7 @@ article {
   justify-content: center;
   border: solid 0.5px black;
   box-shadow: 0 0 1px 1px rgb(10,10,10);
-  background-image: 
+  /*background-image: 
     -webkit-radial-gradient(  50%   0%,  8% 50%, hsla(0,5%,85%,.5) 0%, hsla(0,5%,85%,0) 100%),
     -webkit-radial-gradient(  50% 100%, 12% 50%, hsla(0,5%,85%,.6) 0%, hsla(0,5%,85%,0) 100%),
     -webkit-radial-gradient(   0%  50%, 50%  7%, hsla(0,5%,85%,.5) 0%, hsla(0,5%,85%,0) 100%),
