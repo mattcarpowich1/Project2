@@ -76,6 +76,42 @@ nav {
   margin-left: 3px;
 }
 
+/****** STEP COLOR ******/
+.active-step-C {
+  z-index: 10;
+  box-shadow: 0 0 15px 5px red !important;
+}
+
+.active-step-D {
+  z-index: 10;
+  box-shadow: 0 0 15px 5px orange !important;
+}
+
+.active-step-E {
+  z-index: 10;
+  box-shadow: 0 0 15px 5px yellow !important;
+}
+
+.active-step-F {
+  z-index: 10;
+  box-shadow: 0 0 15px 5px green !important;
+}
+
+.active-step-G {
+  z-index: 10;
+  box-shadow: 0 0 15px 5px blue !important;
+}
+
+.active-step-A {
+  z-index: 10;
+  box-shadow: 0 0 15px 5px indigo !important;
+}
+
+.active-step-B {
+  z-index: 10;
+  box-shadow: 0 0 15px 5px violet !important;
+}
+
 /****** TILE STYLES ******/
 article {
   padding: 0 !important;
@@ -329,6 +365,11 @@ input::placeholder {
   height: 55px;
 }
 
+.modal-step:hover {
+  z-index: 2;
+  box-shadow: 0 0 10px 0px #fff;
+}
+
 .modal-step {
   width: 45px;
   height: 45px;
@@ -336,19 +377,6 @@ input::placeholder {
   color: black;
   font-size: 18px;
   font-weight: bold;
-}
-
-.modal-step:hover {
-  background-color: gold;
-}
-
-.active-step {
-  z-index: 10;
-  background-color: #fff;
-  box-shadow:
-    0 0 20px 10px #fff,
-    0 0 40px 20px #f0f,
-    0 0 80px 40px #0ff;
 }
 
 .unclicked {
@@ -430,7 +458,7 @@ input::placeholder {
 }
 
 .picked {
-  background-color: hsla(217, 71%, 53%, 0.9);
+  background-color: hsla(217, 71%, 53%, 0.8) !important;
 }
 
 .percussion-btn-div {
@@ -440,6 +468,11 @@ input::placeholder {
 .percussion-btn {
   background-color: #B2B2B2;
   background-image: none; 
+}
+
+.percussion-btn:hover {
+  z-index: 2;
+  box-shadow: 0 0 10px 0px #fff;
 }
 
 /****** NAVBAR STYLES ******/

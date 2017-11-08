@@ -170,10 +170,9 @@ StartAudioContext(Tone.context, "article").then(function() {
         modalStep = 0;
       }
 
-      $(".modal-step").each(function() {
-        $(this).removeClass("active-step");
-      });
-      $(`#modal-step-${modalStep}`).addClass("active-step");
+      let prev = modalStep === 0 ? seq.length-1 : modalStep - 1;
+      $(`#modal-step-${prev}`).removeClass(`active-step-${seq[prev][0]}`);
+      $(`#modal-step-${modalStep}`).addClass(`active-step-${seq[modalStep][0]}`);
 
       if (seq[modalStep] != " ") {
         modalSynth.triggerAttackRelease(seq[modalStep], "8n", time);
@@ -203,7 +202,6 @@ StartAudioContext(Tone.context, "article").then(function() {
     if ($(this).val() === 'play') {
       if (modalLoop !== undefined) {
         if (modalLoop.state !== "started") {
-          // defineLoop(modalSequence, modalBeat);
           modalStep = 0;
           Tone.Transport.start();
           setTimeout(function() {
@@ -211,7 +209,6 @@ StartAudioContext(Tone.context, "article").then(function() {
           }, 3);
         }
       } else {
-        // defineLoop(modalSequence, modalBeat);
         modalStep = 0;
         Tone.Transport.start();
         setTimeout(function() {
@@ -222,8 +219,9 @@ StartAudioContext(Tone.context, "article").then(function() {
       if (modalLoop.state === "started") {
         modalLoop.stop(0.01);
         Tone.Transport.stop();
-      }
-    }
+        removeActive(".modal-step");
+      } 
+    } 
   });
 
   $(".modal-beat-sel").on("click", function() {
@@ -261,16 +259,14 @@ StartAudioContext(Tone.context, "article").then(function() {
   $(".close-modal").on("click", function() {
     $(".modal").removeClass("is-active");
     clearModal();
-    if (modalLoop !== undefined) modalLoop.stop(0.01);
-    modalLoop = undefined;
+    modalLoop.stop(0.01);
   });
 
   //closes modal if clicking off of modal
   $(".modal-background").on("click", function() {
     $(".modal").removeClass("is-active");
     clearModal();
-    if (modalLoop !== undefined) modalLoop.stop(0.01);
-    modalLoop = undefined;
+    modalLoop.stop(0.01);
   });
 
   //pick which notes are sent to steps
@@ -357,14 +353,24 @@ function clearModal() {
     " ",
     " "
   ];
-  $(".modal-step").each(function() {
-    $(this).removeClass("active-step");
-  });
-  // $.each($(".step"), function() {
-  //   $(this).css("border-color", "black");
-  //   $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
-  // });
+  removeActive('.modal-step');
 }
+
+function removeActive (el, stepKey='all') {
+  if (stepKey === 'all') {
+    $(el).each( function () {
+      $(el).removeClass("active-step-C");
+      $(el).removeClass("active-step-D");
+      $(el).removeClass("active-step-E");
+      $(el).removeClass("active-step-F");
+      $(el).removeClass("active-step-G");
+      $(el).removeClass("active-step-A");
+      $(el).removeClass("active-step-B");
+    });
+  } else {
+    $(el).removeClass(`active-step-${stepKey}`);
+  }
+};
 
 $("#publish-riff").on("click", function() {
   let sequenceString = JSON.stringify(modalSequence);
@@ -448,16 +454,22 @@ $(".p8-option").on("change", function() {
 //Toggle Kick Drum
 $('#kick_button').on('click', function() {
   kickActive = !kickActive;
+  if (kickActive) $(this).addClass('picked');
+  else $(this).removeClass('picked');
 });
 
 //Toggle Snare Drum
 $('#snare_button').on('click', function() {
   snareActive = !snareActive;
+  if (snareActive) $(this).addClass('picked');
+  else $(this).removeClass('picked');
 });
 
 //Toggle Cymbal
 $('#cymbal_button').on('click', function() {
   cymbalActive = !cymbalActive;
+  if (cymbalActive) $(this).addClass('picked');
+  else $(this).removeClass('picked');
 });
 
 //takes in sequence from db and turns it into proper array
@@ -481,14 +493,9 @@ function defineTileLoop(id, seq, step, beat) {
       step = 0;
     }
 
-    let prev = step === 0 ? 15 : step - 1;
-    $(`#step-${id}-${prev}`).css("border-color", "black");
-    $(`#step-${id}-${prev}`).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
-    $(`#step-${id}-${step}`).css("border-color", `${getColor(seq[step][0])}`);
-    $(`#step-${id}-${step}`).css(
-      "box-shadow",
-      `0 0 20px 5px ${getColor(seq[step][0])}`
-    );
+    let prev = step === 0 ? seq.length - 1 : step - 1;
+    $(`#step-${id}-${prev}`).removeClass(`active-step-${seq[prev][0]}`);
+    $(`#step-${id}-${step}`).addClass(`active-step-${seq[step][0]}`);
 
     if (seq[step] != " ") {
       tileSynth.triggerAttackRelease(seq[step], "8n", time);
@@ -497,35 +504,6 @@ function defineTileLoop(id, seq, step, beat) {
     step++;
   }, `${beat}n`);
   return loop;
-}
-
-function getColor(note) {
-  switch (note) {
-    case "C":
-      return colors[0];
-      break;
-    case "D":
-      return colors[1];
-      break;
-    case "E":
-      return colors[2];
-      break;
-    case "F":
-      return colors[3];
-      break;
-    case "G":
-      return colors[4];
-      break;
-    case "A":
-      return colors[5];
-      break;
-    case "B":
-      return colors[6];
-      break;
-    default:
-      return "white";
-      break;
-  }
 }
 
 //removes last element from arrays
@@ -582,10 +560,7 @@ function handlePlay(id, index, hitPlay, hitStop) {
     if (ref > -1) {
       loopsPlaying[ref].stop(0.01);
       spliceActiveLoop(ref);
-      $.each($(".step"), function() {
-        $(this).css("border-color", "black");
-        $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
-      });
+      removeActive(".step");
     }
   } else {
     if (activeRiffs.length < maxPlaying) {
