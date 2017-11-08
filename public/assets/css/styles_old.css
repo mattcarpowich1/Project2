@@ -5,6 +5,10 @@ html,body {
   font-size: 14px;
   font-weight: 300;
   background-color: #DCDCDC;
+  background-size: 3px 3px;
+  background-image: -webkit-linear-gradient( 20deg, hsla(0,0%,0%,0) 0px, 
+                                                    hsla(0,0%,0%,.10) 50%, 
+                                                    hsla(0,0%,0%,0) 100% );
 }
 
 input {
@@ -27,7 +31,7 @@ p {
 }
 
 .button {
-  color: #818181;
+  color: #818181 !important;
   box-shadow: 0 0 1px 1px rgb(10,10,10);
   background-image: linear-gradient(top, #383838 0%,
                                     #1F1F1F 5%, #161616 100%);
@@ -47,7 +51,10 @@ p {
 
 /****** NAVBAR STYLES ******/
 nav {
-  
+  user-select: none;
+  background-size: 1px 2px;
+  background-image: -webkit-linear-gradient( 90deg, hsla(0,0%,0%,0) 0px, 
+                                             hsla(0,0%,0%,.10) 50%, hsla(0,0%,0%,0) 100% );
 }
 
 .navbar-brand {
@@ -64,7 +71,7 @@ nav {
   -webkit-mask-image: -webkit-gradient(linear, left top, 
                                        left bottom, from(rgba(0,0,0,1)), 
                                        color-stop(50%, rgba(0,0,0,.5)), to(rgba(0,0,0,1)));
-  transition: text-shadow 0.3s ease;
+  transition: text-shadow 0.5s ease;
 }
 
 #navbar-logo:hover {
@@ -74,6 +81,15 @@ nav {
 
 #navbar-input-button {
   margin-left: 3px;
+}
+
+/****** GENERIC STEP STYLE ******/
+.step-grey{
+  background: grey;
+}
+
+.step-blue{
+  background: blue;
 }
 
 /****** TILE STYLES ******/
@@ -164,8 +180,7 @@ article {
   padding: 6.5rem 10px 20px 10px;
 }
 
-.step-wrapper,
-.modal-step-wrapper {
+.step-wrapper {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -194,11 +209,16 @@ article {
   justify-content: center;
   border: solid 0.5px black;
   box-shadow: 0 0 1px 1px rgb(10,10,10);
-  background-color: #B2B2B2;
-  background: radial-gradient(farthest-corner at 50% 25%, 
-                              hsla(0, 0%, 50%, 1), 
-                              hsla(0, 0%, 30%, 1));
-  transition: border-color ease-out 0.5s;
+  background-image: 
+    -webkit-radial-gradient(  50%   0%,  8% 50%, hsla(0,5%,85%,.5) 0%, hsla(0,5%,85%,0) 100%),
+    -webkit-radial-gradient(  50% 100%, 12% 50%, hsla(0,5%,85%,.6) 0%, hsla(0,5%,85%,0) 100%),
+    -webkit-radial-gradient(   0%  50%, 50%  7%, hsla(0,5%,85%,.5) 0%, hsla(0,5%,85%,0) 100%),
+    -webkit-radial-gradient( 100%  50%, 50%  5%, hsla(0,5%,85%,.5) 0%, hsla(0,5%,85%,0) 100%),
+    
+    -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,5%,5%,0) 0%, hsla(0,5%,5%,0) 3%, hsla(0,5%,5%,.1) 3.5%),
+    -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,5%,0) 0%, hsla(0,0%,5%,0)   6%, hsla(0,0%,5%,.1) 7.5%),
+    -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,5%,0) 0%, hsla(0,0%,5%,0) 1.2%, hsla(0,0%,5%,.2) 2.2%),
+    -webkit-radial-gradient( 50% 50%, 200% 50%, hsla(0,0%,70%,1) 5%, hsla(0,0%,65%,1) 30%, hsla(0,0%,40%,1) 100%);
 }
 
 .play-div {
@@ -221,22 +241,21 @@ article {
 
 #favorite {
   z-index: 10;
-  font-size: 20px;
 }
 
 .fa-star-o {
   color: #818181;
 }
 
-.favorite:hover,
-.fa-star {
+.fa-star,
+.favorite:hover {
   color: #F0F8FF;
   cursor: pointer;
   text-shadow: 0 0 3px #F0F8FF;
 }
 
 .control-row {
-  margin: 10px 0 15px 0;
+  margin: 20px 0 25px 0;
   justify-content: center;
 }
 
@@ -262,9 +281,6 @@ article {
 }
 
 /****** MODAL STYLES ******/
-.modal-background {
-  background-color: hsla(0, 0%, 70%, 0.9) !important;
-}
 
 .modal-card {
   position: relative;
@@ -278,7 +294,7 @@ article {
   background-color: hsl(200,5%,15%) !important;
   background-size: 4px 4px;
   background-image: -webkit-linear-gradient( 45deg, hsla(0,0%,0%,0) 0px, 
-                                             hsla(0,0%,0%,.10) 50%, hsla(0,0%,0%,0) 100% );
+                                               hsla(0,0%,0%,.10) 50%, hsla(0,0%,0%,0) 100% );
   border-radius: 5px;                                        
 }
 
@@ -324,18 +340,12 @@ input::placeholder {
 }
 
 /****** MODAL STEP GRID ******/
-.modal-step-wrapper {
-  width: 55px;
-  height: 55px;
-}
-
 .modal-step {
-  width: 45px;
-  height: 45px;
+  width: 60px;
+  height: 60px;
   cursor: pointer;
   color: black;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
 }
 
 .modal-step:hover {
@@ -356,7 +366,7 @@ input::placeholder {
 }
 
 .clicked {
-  border: solid 3px hsla(217, 71%, 53%, 1);
+  border: solid 3px red;
 }
 
 /****** MODAL CONTROL BAR ******/
@@ -388,23 +398,8 @@ input::placeholder {
 }
 
 /****** MODAL NOTE SELECTOR ******/
-
-.table-wrapper {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  background-image: -webkit-linear-gradient(top, #232323 0%, 
-                                            #4A4A4A 100%);
-  background-image: -webkit-gradient(linear, left top, 
-                                     left bottom, from(#232323), 
-                                     to(#4A4A4A));
-  padding: 5px;
-  margin: auto;
-}
-
 #modal-key-table {
-  margin-bottom: 0px;
+  margin-bottom: 13px;
 }
 
 .modal-key-table-head {
@@ -426,20 +421,11 @@ input::placeholder {
 }
 
 .step-selector:hover {
-  background-color: grey;
+  background-color: gold;
 }
 
 .picked {
-  background-color: hsla(217, 71%, 53%, 0.9);
-}
-
-.percussion-btn-div {
-  margin-top: 10px !important;
-}
-
-.percussion-btn {
-  background-color: #B2B2B2;
-  background-image: none; 
+  background-color: red;
 }
 
 /****** NAVBAR STYLES ******/
@@ -469,11 +455,6 @@ input::placeholder {
   .step {
     width: 40px;
     height: 40px;
-  }
-
-  .modal-step-wrapper {
-    width: 48px;
-    height: 48px;
   }
 }
 
