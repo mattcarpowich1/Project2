@@ -148,6 +148,7 @@ StartAudioContext(Tone.context, "article").then(function() {
 
         //set riff name
         $("#modal-title-input").val(riff.title);
+        $(".modal").attr("data-id", riffId)
 
         $.each($(".modal-step"), function(index, value) {
           $(this).text(modalSequence[index]);
@@ -395,6 +396,19 @@ $(".favorite").on("click", function() {
     $(this).removeClass("fa-star-o");
     $(this).addClass("fa-star");
   }
+});
+
+$(".fa-star-o").on("click", function() {
+  let postBody = {
+    riffId: $(this).closest("article").attr("data-id")
+  };
+  $.post("/add_favorite", postBody, function() {
+    console.log("THERE");
+  });
+});
+
+$(".fa-star").on("click", function() {
+ // REMOVE FAVORITE
 });
 
 //altering to sharps and flats
