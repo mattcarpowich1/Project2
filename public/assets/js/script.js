@@ -398,6 +398,19 @@ $(".favorite").on("click", function() {
   }
 });
 
+$(".fa-star-o").on("click", function() {
+  let postBody = {
+    riffId: $(this).closest("article").attr("data-id")
+  };
+  $.post("/add_favorite", postBody, function() {
+    console.log("THERE");
+  });
+});
+
+$(".fa-star").on("click", function() {
+ // REMOVE FAVORITE
+});
+
 //altering to sharps and flats
 $(".mod-check").on("click", function() {
   let key = $(this).attr("id")[0];
