@@ -148,6 +148,7 @@ StartAudioContext(Tone.context, "article").then(function() {
 
         //set riff name
         $("#modal-title-input").attr("placeholder", riff.title);
+        $(".modal").attr("data-id", riffId)
 
         $.each($(".modal-step"), function(index, value) {
           $(this).text(modalSequence[index]);
