@@ -122,6 +122,12 @@ StartAudioContext(Tone.context, "article").then(function() {
     loopSteps = [];
     resetRadio();
 
+    if (!$(this).data('authored')) {
+      $('footer').hide();
+    } else {
+      $('footer').show();
+    }
+
     $(".modal").addClass("is-active");
 
     let riffId = $(this).data("id");
@@ -132,6 +138,7 @@ StartAudioContext(Tone.context, "article").then(function() {
         url: url,
         method: "GET"
       }).done(function(riff) {
+
         // set tempo to riff's tempo
         Tone.Transport.bpm.value = 120;
 
