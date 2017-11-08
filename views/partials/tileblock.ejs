@@ -9,7 +9,19 @@
         <div class="tile-title">
           <div class="status-bar">
             <% if (i != -1) { %>
-            <i class="fa fa-star-o favorite" id="favorite" aria-hidden="true"></i>
+                <% if(riffs[i].favorites[i] != undefined && user) { %>
+                  <% let foundFavorite = false; %>
+                  <% for (let j = 1; j < riffs[i].favorites.length; j++) { %>
+                      <% if (riffs[i].favorites[j].user_id == user.id) { %>
+                        <i class="fa fa-star favorite" id="favorite" aria-hidden="true"></i>
+                      <% foundFavorite = true; break; } %>
+                  <% } %>
+                  <% if (!foundFavorite) { %>
+                    <i class="fa fa-star-o favorite" id="favorite" aria-hidden="true"></i>
+                  <% } %>
+                <% } else if(user) { %>
+                  <i class="fa fa-star-o favorite" id="favorite" aria-hidden="true"></i>
+                <% } %>
             <% } %>
           </div>
           <p class="riff-title">

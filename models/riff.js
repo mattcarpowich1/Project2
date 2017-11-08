@@ -202,6 +202,10 @@ module.exports = function(sequelize, DataTypes) {
     Riffs.belongsTo(models.Users, {
       onDelete: "CASCADE"
     });
+
+    Riffs.hasMany(models.Favorites, {
+      onDelete: "CASCADE"
+    });
   };
   // RELATIONSHIPS GO here
   //Riffs.belongsTo(Users);
