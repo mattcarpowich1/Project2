@@ -91,8 +91,8 @@ StartAudioContext(Tone.context, "article").then(function() {
   //opens modal when click on tile
   $('article').on('click', function (evt) {
 
-    if (evt.target.id === 'favorite') return;
-    if (evt.target.className.indexOf('fa') > -1) return;
+    // if (evt.target.id === 'favorite') return;
+    // if (evt.target.className.indexOf('fa') > -1) return;
     // if (evt.target.className.indexOf('control-play') > -1) return;
     if (evt.target.className.indexOf('controller-btn') > -1) return;
     if (loopsPlaying[0] != null) {
@@ -394,12 +394,12 @@ $('#cymbal_button').on('click', function() {
 
 //takes in sequence from db and turns it into proper array
 function getStepArray (dbString) {
-  let seq = dbString.split(", ");
+  let seq = dbString.split(",");
 
   seq[0] = seq[0].slice(1);
   seq[seq.length-1] = seq[seq.length-1].slice(0, -1);
   seq.forEach((el, i) => {
-    seq[i] = el.slice(1,-1);
+    seq[i] = el.trim().slice(1,-1);
   });
 
   return seq;
@@ -421,7 +421,7 @@ function defineTileLoop(id, seq, step, beat) {
     if (step >= seq.length) {
       step = 0;
     }
-    console.log(seq[step]);
+    
     let prev = step === 0 ? 15 : step - 1;
     $(`#step-${id}-${prev}`).css('border-color', 'black');
     $(`#step-${id}-${prev}`).css('box-shadow', '0 0 1px 1px rgb(10,10,10)');

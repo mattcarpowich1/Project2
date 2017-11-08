@@ -64,7 +64,7 @@ nav {
   -webkit-mask-image: -webkit-gradient(linear, left top, 
                                        left bottom, from(rgba(0,0,0,1)), 
                                        color-stop(50%, rgba(0,0,0,.5)), to(rgba(0,0,0,1)));
-  transition: text-shadow 0.5s ease;
+  transition: text-shadow 0.3s ease;
 }
 
 #navbar-logo:hover {
@@ -206,6 +206,7 @@ article {
   background: radial-gradient(farthest-corner at 50% 25%, 
                               hsla(0, 0%, 50%, 1), 
                               hsla(0, 0%, 30%, 1));
+  transition: border-color ease-out 0.5s;
 }
 
 .play-div {
@@ -228,13 +229,13 @@ article {
 
 #favorite {
   z-index: 10;
+  font-size: 20px;
 }
 
 .fa-star-o {
   color: #818181;
 }
 
-.fa-star,
 .favorite:hover {
   color: #F0F8FF;
   cursor: pointer;
@@ -268,7 +269,6 @@ article {
 }
 
 /****** MODAL STYLES ******/
-
 .modal-card {
   position: relative;
   background-color: hsla(0, 0%, 30%, 1);
