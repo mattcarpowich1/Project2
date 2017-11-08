@@ -164,6 +164,8 @@ router.post("/add_favorite", require("connect-ensure-login").ensureLoggedIn(), f
   }
   db.Favorites.create(newFavorite).then(function(result) {
     console.log("Added Favorite");
+  }).then(function() {
+    res.json({"complete" : "true"});
   });
 })
 
@@ -173,6 +175,8 @@ router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn()
       RiffId: req.body.riffId,
       userId: req.user.dataValues.id
     }
+  }).then(function() {
+    res.json({"complete" : "true"});
   });
 })
 
