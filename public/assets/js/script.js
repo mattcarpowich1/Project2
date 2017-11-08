@@ -398,17 +398,25 @@ $(".favorite").on("click", function() {
   }
 });
 
-$(".fa-star-o").on("click", function() {
-  let postBody = {
-    riffId: $(this).closest("article").attr("data-id")
-  };
-  $.post("/add_favorite", postBody, function() {
-    console.log("THERE");
-  });
-});
+$(".favorite").on("click", function() {
+  let riffId = 0;
+  if ($(this).is("#modal-favorite"))
+    riffId = $(this).closest(".modal").attr("data-id");
+  else
+    riffId = $(this).closest("article").attr("data-id");
 
-$(".fa-star").on("click", function() {
- // REMOVE FAVORITE
+  let postBody = {
+    riffId: riffId
+  };
+  if ($(this).hasClass("fa-star")) {
+    $.post("/add_favorite", postBody, function() {
+      console.log("FAV");
+    });
+  } else {
+    $.post("/remove_favorite", postBody, function() {
+      console.log("UNFAV");
+    });
+  }
 });
 
 //altering to sharps and flats

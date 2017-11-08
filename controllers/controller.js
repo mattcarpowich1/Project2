@@ -16,8 +16,30 @@ let db = require("../models");
  * @param  {[type]} res [HTTP Response, renders index.ejs]
  */
 router.get("/", function(req, res) {
-  db.Riffs.findAll({}).then(function(allRiffs) {
-    res.render("pages/index", { riffs: allRiffs, user: req.user });
+  db.Riffs.findAll({
+    include: [{
+      model: db.Favorites
+    }]
+  }).then(function(allRiffs) {
+    const resObj = allRiffs.map(riff => {
+      return Object.assign({}, {
+        id: riff.id,
+        title: riff.title,
+        sequence: riff.sequence,
+        tempo: 120,
+        beat_division: riff.beat_division,
+        favorites: riff.Favorites.map(favorite => {
+          return Object.assign({}, {
+            id: favorite.id,
+            user_id: favorite.UserId,
+          })
+        })
+      })
+    });
+    res.render("pages/index", {
+      riffs: resObj,
+      user: req.user
+    });
   });
 });
 
@@ -29,7 +51,10 @@ router.get("/", function(req, res) {
 router.get("/login", function(req, res) {
   db.Riffs.findAll({}).then(function(allRiffs) {
     // change to users table when available?
-    res.render("pages/login", { riffs: allRiffs, user: req.user });
+    res.render("pages/login", {
+      riffs: allRiffs,
+      user: req.user
+    });
   });
 });
 
@@ -41,7 +66,10 @@ router.get("/login", function(req, res) {
 router.get("/user", function(req, res) {
   db.Riffs.findAll({}).then(function(allRiffs) {
     // change to users table when available
-    res.render("pages/user", { riffs: allRiffs, user: req.user });
+    res.render("pages/user", {
+      riffs: allRiffs,
+      user: req.user
+    });
   });
 });
 
@@ -78,10 +106,30 @@ router.get("/api/users/:userid", function(req, res) {
     .findAll({
       where: {
         UserId: req.params.userid
-      }
-    })
-    .then(function(usersRiffs) {
-      res.render("pages/index", {user: req.user, riffs:usersRiffs});
+      },
+      include: [{
+        model: db.Favorites
+      }]
+    }).then(function(allRiffs) {
+      const resObj = allRiffs.map(riff => {
+        return Object.assign({}, {
+          id: riff.id,
+          title: riff.title,
+          sequence: riff.sequence,
+          tempo: 120,
+          beat_division: riff.beat_division,
+          favorites: riff.Favorites.map(favorite => {
+            return Object.assign({}, {
+              id: favorite.id,
+              user_id: favorite.UserId,
+            })
+          })
+        })
+      });
+      res.render("pages/index", {
+        riffs: resObj,
+        user: req.user
+      });
     });
 });
 
@@ -104,30 +152,28 @@ router.post("/api/riffs/new", function(req, res) {
     play_count: 0,
     UserId: req.user.dataValues.id
   }
-  console.log(riffObj);
   db.Riffs.create(riffObj).then(function(newRiff) {
     res.json(newRiff);
   });
 });
 
 router.post("/add_favorite", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
-  console.log(req.body.riffId);
   let newFavorite = {
     RiffId: req.body.riffId,
     UserId: req.user.dataValues.id
   }
   db.Favorites.create(newFavorite).then(function(result) {
-    console.log(result);
+    console.log("Added Favorite");
   });
 })
 
 router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
-  console.log(req.body.riffId);
-  let newFavorite = {
-    RiffId: req.body.riffId,
-    UserId: req.user.dataValues.id
-  }
-  // DESTROY WITH SEQUELIZE
+  db.Favorites.destroy({
+    where: {
+      RiffId: req.body.riffId,
+      userId: req.user.dataValues.id
+    }
+  });
 })
 
 // =======================================
@@ -136,7 +182,9 @@ router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn()
 
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: "/login" }),
+  passport.authenticate("local", {
+    failureRedirect: "/login"
+  }),
   function(req, res) {
     res.redirect("/");
   }
@@ -151,7 +199,7 @@ router.post(
 );
 
 router.get("/logout", function(req, res) {
-  req.session.destroy(function (err) {
+  req.session.destroy(function(err) {
     if (err) throw err;
     res.redirect('/');
   });
@@ -161,7 +209,9 @@ router.get(
   "/profile",
   require("connect-ensure-login").ensureLoggedIn(),
   function(req, res) {
-    res.render("pages/profile", { user: req.user});
+    res.render("pages/profile", {
+      user: req.user
+    });
   }
 );
 
