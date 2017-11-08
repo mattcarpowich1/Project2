@@ -110,6 +110,26 @@ router.post("/api/riffs/new", function(req, res) {
   });
 });
 
+router.post("/add_favorite", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
+  console.log(req.body.riffId);
+  let newFavorite = {
+    RiffId: req.body.riffId,
+    UserId: req.user.dataValues.id
+  }
+  db.Favorites.create(newFavorite).then(function(result) {
+    console.log(result);
+  });
+})
+
+router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
+  console.log(req.body.riffId);
+  let newFavorite = {
+    RiffId: req.body.riffId,
+    UserId: req.user.dataValues.id
+  }
+  // DESTROY WITH SEQUELIZE
+})
+
 // =======================================
 //             USER ROUTES
 // =======================================
@@ -131,8 +151,10 @@ router.post(
 );
 
 router.get("/logout", function(req, res) {
-  req.logout();
-  res.redirect("/");
+  req.session.destroy(function (err) {
+    if (err) throw err;
+    res.redirect('/');
+  });
 });
 
 router.get(
