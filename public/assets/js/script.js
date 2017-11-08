@@ -348,12 +348,12 @@ $(".p8-option").on("change", function() {
 
 //takes in sequence from db and turns it into proper array
 function getStepArray(dbString) {
-  let seq = dbString.split(", ");
+  let seq = dbString.split(",");
 
   seq[0] = seq[0].slice(1);
   seq[seq.length - 1] = seq[seq.length - 1].slice(0, -1);
   seq.forEach((el, i) => {
-    seq[i] = el.slice(1, -1);
+    seq[i] = el.trim().slice(1, -1);
   });
 
   return seq;

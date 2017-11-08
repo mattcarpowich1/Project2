@@ -73,6 +73,18 @@ router.get("/api/riffs/:id", function(req, res) {
     });
 });
 
+router.get("/api/users/:userid", function(req, res) {
+  db.Riffs
+    .findAll({
+      where: {
+        UserId: req.params.userid
+      }
+    })
+    .then(function(usersRiffs) {
+      res.render("pages/index", {user: req.user, riffs:usersRiffs});
+    });
+});
+
 // =======================================
 //             POST ROUTES
 // =======================================
@@ -89,7 +101,8 @@ router.post("/api/riffs/new", function(req, res) {
     tempo: 120,
     beat_division: parseInt(req.body.beat_division),
     num_favorites: 0,
-    play_count: 0
+    play_count: 0,
+    UserId: req.user.dataValues.id
   }
   console.log(riffObj);
   db.Riffs.create(riffObj).then(function(newRiff) {
@@ -126,7 +139,7 @@ router.get(
   "/profile",
   require("connect-ensure-login").ensureLoggedIn(),
   function(req, res) {
-    res.render("pages/profile", { user: req.user });
+    res.render("pages/profile", { user: req.user});
   }
 );
 
