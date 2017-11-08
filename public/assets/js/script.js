@@ -103,6 +103,7 @@ StartAudioContext(Tone.context, "article").then(function() {
     if (evt.target.className.indexOf("controller-btn") > -1) return;
     if (evt.target.className.indexOf("favorite") > -1) return;
     $(".modal").addClass("is-active");
+    removeActive(".step");
 
     if (loopsPlaying[0] != null) {
       loopsPlaying[0].stop(0.01);
