@@ -425,7 +425,7 @@ $("#delete").on("click", function () {
     $(".modal").removeClass("is-active");
     $.ajax({
       url: "/delete",
-      method: "DELETE",
+      method: "PUT",
       data: {
         id: riffId
       },

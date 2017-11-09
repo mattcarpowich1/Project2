@@ -298,7 +298,7 @@ router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn()
 // =======================================
 //             DELETE ROUTES
 // =======================================
-router.delete("/delete", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
+router.put("/delete", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
   let riff = req.body.data;
   db.Riffs.update({
     display: false
@@ -327,7 +327,6 @@ router.put("/update", require("connect-ensure-login").ensureLoggedIn(), function
     }
   }).then(function() {
     res.json({"complete" : "true"});
-    console.log('deleteeeeeeeeeeeeeeeeeeeeee!');
   });
 })
 
