@@ -192,7 +192,7 @@ router.get("/api/users/:userid", function(req, res) {
   db.Riffs
     .findAll({
       where: {
-        title: req.query.title 
+        title: req.query.title
       },
       include: [{
         model: db.Favorites
@@ -216,7 +216,7 @@ router.get("/api/users/:userid", function(req, res) {
       });
       db.Riffs.findAll({
         where: {
-          title: req.query.title 
+          title: req.query.title
         },
         include: [
           {model: db.Users}
@@ -289,6 +289,39 @@ router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn()
     }
   }).then(function() {
     res.json({"complete" : "true"});
+  });
+})
+
+// =======================================
+//             DELETE ROUTES
+// =======================================
+router.delete("/delete", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
+  db.Riffs.destroy({
+    where: {
+      id: req.body.id
+    }
+  }).then(function() {
+    res.json({"complete" : "true"});
+    console.log('updateeeeeeeeeeeee!');
+  });
+})
+
+// =======================================
+//             PUT ROUTES
+// =======================================
+router.put("/update", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
+  let riff = req.body.data;
+  db.Riffs.update({
+    title: riff.title,
+    sequence: riff.sequence,
+    beat_division: parseInt(riff.beat_division)
+  }, {
+    where: {
+      id: req.body.id
+    }
+  }).then(function() {
+    res.json({"complete" : "true"});
+    console.log('deleteeeeeeeeeeeeeeeeeeeeee!');
   });
 })
 
