@@ -151,8 +151,6 @@ router.get("/api/users/:userid", function(req, res) {
           })
         })
       });
-      console.log('!!!!!!!!!!!!!!!!!!!!!1');
-      console.log(resObj);
       db.Riffs.findAll({
         where: {
           UserId: req.params.userid
