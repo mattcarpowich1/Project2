@@ -262,6 +262,7 @@ router.post("/api/riffs/new", function(req, res) {
     beat_division: parseInt(req.body.beat_division),
     num_favorites: 0,
     play_count: 0,
+    display: true,
     UserId: req.user.dataValues.id
   }
   db.Riffs.create(riffObj).then(function(newRiff) {
@@ -296,13 +297,16 @@ router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn()
 //             DELETE ROUTES
 // =======================================
 router.delete("/delete", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
-  db.Riffs.destroy({
+  let riff = req.body.data;
+  db.Riffs.update({
+    display: false
+  }, {
     where: {
       id: req.body.id
     }
   }).then(function() {
     res.json({"complete" : "true"});
-    console.log('updateeeeeeeeeeeee!');
+    console.log('Display False!');
   });
 })
 
