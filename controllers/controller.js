@@ -57,6 +57,8 @@ router.get("/", function(req, res) {
           });
         }
       });
+      console.log(resObj);
+      console.log(res2Obj);
       res.render("pages/index", {
         riffs: resObj,
         user: req.user,
@@ -151,10 +153,8 @@ router.get("/api/users/:userid", function(req, res) {
           })
         })
       });
+      console.log(resObj);
       db.Riffs.findAll({
-        where: {
-          UserId: req.params.userid
-        },
         include: [
           {model: db.Users}
         ],
@@ -173,6 +173,7 @@ router.get("/api/users/:userid", function(req, res) {
             });
           }
         });
+        console.log(res2Obj);
         res.render("pages/index", {
           riffs: resObj,
           riffUsers: res2Obj,
@@ -218,9 +219,6 @@ router.get("/api/users/:userid", function(req, res) {
           })
         });
         db.Riffs.findAll({
-          where: {
-            title: req.query.title
-          },
           include: [
             {model: db.Users}
           ],
