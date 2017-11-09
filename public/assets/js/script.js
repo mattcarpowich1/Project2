@@ -248,7 +248,7 @@ StartAudioContext(Tone.context, "article").then(function() {
   });
 
   // Play the sequence that was clicked
-  $(".tile-controller-btn").on("click", function(event) {
+  $(".tile-radio").on("click", function(event) {
     let id = $(this).data("id");
     let index;
 
@@ -574,7 +574,8 @@ function handlePlay(id, index, hitPlay, hitStop) {
     if (ref > -1) {
       loopsPlaying[ref].stop(0.01);
       spliceActiveLoop(ref);
-      removeActive(".step");
+      removeActiveStepTiles(id, seq.length);
+      // removeActive(".step");
     }
   } else {
     if (activeRiffs.length < maxPlaying) {
@@ -586,20 +587,31 @@ function handlePlay(id, index, hitPlay, hitStop) {
     } else {
       if (ref === -1) {
         //stop and remove last playing loop
-        resetRadio(activeRiffs[activeRiffs.length - 1]);
+        let stopRiff = activeRiffs[activeRiffs.length - 1];
+        resetRadio(stopRiff);
         loopsPlaying[activeRiffs.length - 1].stop(0.01);
         popActiveLoop();
-
-        $.each($(".step"), function() {
-          $(this).css("border-color", "black");
-          $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
-        });
 
         //start clicked loop
         pushActiveLoop(id, seq, beat);
         Tone.Transport.start();
         loopsPlaying[activeRiffs.length - 1].start(0.01);
+
+        //turns off colors
+        removeActiveStepTiles(stopRiff, seq.length);
       }
     }
   }
 }
+
+function removeActiveStepTiles (id, len) {
+  for (let i = 0; i < len - 1; i++) {
+    $(`#step-${id}-${i}`).removeClass("active-step-C");
+    $(`#step-${id}-${i}`).removeClass("active-step-D");
+    $(`#step-${id}-${i}`).removeClass("active-step-E");
+    $(`#step-${id}-${i}`).removeClass("active-step-F");
+    $(`#step-${id}-${i}`).removeClass("active-step-G");
+    $(`#step-${id}-${i}`).removeClass("active-step-A");
+    $(`#step-${id}-${i}`).removeClass("active-step-B"); 
+  }
+};
