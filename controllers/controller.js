@@ -28,6 +28,7 @@ router.get("/", function(req, res) {
         sequence: riff.sequence,
         tempo: 120,
         beat_division: riff.beat_division,
+        UserId: riff.UserId,
         favorites: riff.Favorites.map(favorite => {
           return Object.assign({}, {
             id: favorite.id,
@@ -119,6 +120,7 @@ router.get("/api/users/:userid", function(req, res) {
           sequence: riff.sequence,
           tempo: 120,
           beat_division: riff.beat_division,
+          UserId: riff.UserId,
           favorites: riff.Favorites.map(favorite => {
             return Object.assign({}, {
               id: favorite.id,
@@ -157,6 +159,7 @@ router.get("/api/users/:userid", function(req, res) {
           sequence: riff.sequence,
           tempo: 120,
           beat_division: riff.beat_division,
+          UserId: riff.UserId,
           favorites: riff.Favorites.map(favorite => {
             return Object.assign({}, {
               id: favorite.id,
