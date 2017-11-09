@@ -46,10 +46,6 @@ p {
 }
 
 /****** NAVBAR STYLES ******/
-nav {
-  
-}
-
 .navbar-brand {
   font-size: 30px;
   font-style: italic;
@@ -116,9 +112,6 @@ nav {
 article {
   padding: 0 !important;
   background-color: hsl(200,5%,15%) !important;
-  background-size: 4px 4px;
-  background-image: -webkit-linear-gradient( 45deg, hsla(0,0%,0%,0) 0px, 
-                                               hsla(0,0%,0%,.10) 50%, hsla(0,0%,0%,0) 100% );
 }
 
 .tile-shine {
@@ -200,23 +193,6 @@ article {
   padding: 6.5rem 10px 20px 10px;
 }
 
-.step-wrapper,
-.modal-step-wrapper {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 50%;
-  background-image: -webkit-linear-gradient(top, #232323 0%, 
-                                            #4A4A4A 100%);
-  background-image: -webkit-gradient(linear, left top, 
-                                     left bottom, from(#232323), 
-                                     to(#4A4A4A));
-  height: 32px;
-  width: 32px;
-  margin: auto;
-}
-
 .step {
   width: 25px;
   height: 25px;
@@ -229,11 +205,7 @@ article {
   flex-direction: column;
   justify-content: center;
   border: solid 0.5px black;
-  box-shadow: 0 0 1px 1px rgb(10,10,10);
-  background-color: #B2B2B2;
-  background: radial-gradient(farthest-corner at 50% 25%, 
-                              hsla(0, 0%, 50%, 1), 
-                              hsla(0, 0%, 30%, 1));
+  background-color: hsla(0, 0%, 50%, 1);
   transition: border-color ease-out 0.5s;
 }
 
@@ -273,27 +245,6 @@ article {
 
 .control-row {
   margin: 10px 0 15px 0;
-  justify-content: center;
-}
-
-.control-bar {
-  position: absolute;
-  top: 27%;
-  left: 0;
-  width: 100%;
-  margin-bottom: 0 !important;
-}
-
-.control-play {
-  width: 50px;
-  height: 50px;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  background: white;
-  margin: auto;
-  z-index: 2;
-  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
   justify-content: center;
 }
 
@@ -361,8 +312,19 @@ input::placeholder {
 
 /****** MODAL STEP GRID ******/
 .modal-step-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 50%;
+  background-image: -webkit-linear-gradient(top, #232323 0%, 
+                                            #4A4A4A 100%);
+  background-image: -webkit-gradient(linear, left top, 
+                                     left bottom, from(#232323), 
+                                     to(#4A4A4A));
   width: 55px;
   height: 55px;
+  margin: auto;
 }
 
 .modal-step:hover {
@@ -377,6 +339,11 @@ input::placeholder {
   color: black;
   font-size: 18px;
   font-weight: bold;
+  box-shadow: 0 0 1px 1px rgb(10,10,10);
+  background-color: #B2B2B2;
+  background: radial-gradient(farthest-corner at 50% 25%, 
+                              hsla(0, 0%, 50%, 1), 
+                              hsla(0, 0%, 30%, 1));
 }
 
 .unclicked {
@@ -462,7 +429,8 @@ input::placeholder {
 }
 
 .percussion-btn-div {
-  margin-top: 10px !important;
+  margin-top: 15px !important;
+  margin-bottom: 0 !important;
 }
 
 .percussion-btn {
@@ -473,6 +441,10 @@ input::placeholder {
 .percussion-btn:hover {
   z-index: 2;
   box-shadow: 0 0 10px 0px #fff;
+}
+
+#beat-slide-container {
+  margin: auto;
 }
 
 /****** NAVBAR STYLES ******/
@@ -510,8 +482,8 @@ input::placeholder {
   }
 }
 
-/****** Controller ******/
-input[type="radio"] {
+/****** Modal Controller ******/
+.modal-radio {
   -webkit-appearance:none;
   outline: none;
   width: 45px;
@@ -527,7 +499,7 @@ input[type="radio"] {
   -webkit-perspective: 200;
 }
 
-input[type="radio"]:before {
+.modal-radio:before {
   content: attr(data-icon);
   font: 30px/30px sans-serif;
   text-shadow: rgba(255,255,255,0.08) 0 -1px 0;
@@ -544,8 +516,7 @@ input[type="radio"]:before {
   border-top: 1px solid rgba(255,255,255,0.15);
 }
 
-
-input[type="radio"]:after {
+.modal-radio:after {
   content: "";
   z-index: 12;
   position: absolute;
@@ -560,7 +531,7 @@ input[type="radio"]:after {
 }
 
 /* checked */
-input[type="radio"]:active, input[type="radio"]:checked {
+.modal-radio:active, .modal-radio:checked {
   -webkit-box-shadow: inset #000 2px 0px 2px, inset #000 -2px 0px 2px;
   background-image: -webkit-gradient(
     linear, left top, left bottom,
@@ -570,7 +541,7 @@ input[type="radio"]:active, input[type="radio"]:checked {
   );  
 }
 
-input[type="radio"]:active:before, input[type="radio"]:checked:before {
+.modal-radio:active:before, .modal-radio:checked:before {
   background-image: -webkit-gradient( linear, left top, left bottom,
     from( hsl(0,0%,19%) ), to( hsl(0,0%,12%) )
   );
@@ -586,7 +557,7 @@ input[type="radio"]:active:before, input[type="radio"]:checked:before {
   -webkit-transform: rotateX(-25deg) scaleX(.94) translateY(0.92px);
 }
 
-input[type="radio"]:checked:before {
+.modal-radio:checked:before {
   color: #F0F8FF;
   text-shadow:  rgba(0,0,0,.5) 0 1px 1px, #F0F8FF 0 0 5px; 
   -webkit-border-image: -webkit-gradient(linear, 0% 0%, 100% 0%, 
@@ -596,29 +567,131 @@ input[type="radio"]:checked:before {
               )50% 100%;
 }
 
-input[type="radio"]:active:after, input[type="radio"]:checked:after {
+.modal-radio:active:after, .modal-radio:checked:after {
   top: 38px;
   -webkit-transform: scale(.90);
   opacity: .4;
 }
 
 /* hover */
-input[type="radio"]:hover {
+.modal-radio:hover {
   cursor: pointer;
 }
 
-input[type="radio"]:checked {
+.modal-radio:checked {
   cursor: default;
 }
 
-input[type="radio"]:hover:before {
+.modal-radio:hover:before {
   background-image: -webkit-gradient( linear, left top, left bottom,
     from(   hsl(0,0%,19.5%) ), to( hsl(0,0%,14%) )
   );
 }
-input[type="radio"]:checked:hover:before {
+.modal-radio:checked:hover:before {
   background-image: -webkit-gradient( linear, left top, left bottom,
     from(   hsl(0,0%,19%) ), to( hsl(0,0%,12%) )
   );
 }
 
+/****** TILE CONTROLLER ******/
+.tile-radio {
+  -webkit-appearance:none;
+  outline: none;
+  width: 45px;
+  height: 50px;
+  position: relative;
+  display: inline-block;
+  margin: 1.5px;
+  border-radius: 3px;
+  background-color: #000;
+  -webkit-background-clip: padding-box;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  -webkit-perspective: 200;
+}
+
+.tile-radio:before {
+  content: attr(data-icon);
+  font: 30px/30px sans-serif;
+  line-height: 35px;
+  text-align: center;
+  position: absolute;
+  z-index: 10;
+  width: 41px;
+  height: 44px;
+  margin: 2px;
+  border-radius: 1.5px; 
+  background-color: hsl(0,0%,20%);
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.tile-radio:checked:before {
+  color: #F0F8FF;
+}
+
+.tile-radio:active:after, .tile-radio:checked:after {
+  top: 38px;
+  -webkit-transform: scale(.90);
+  opacity: .4;
+}
+
+/* hover */
+.tile-radio:hover {
+  cursor: pointer;
+}
+
+.tile-radio:checked {
+  cursor: default;
+}
+
+.tile-radio:hover:before {
+  background-color: hsl(0,0%,14%);
+}
+
+.tile-radio:checked:hover:before {
+  background-color: hsl(0,0%,14%);
+}
+
+/****** SLIDER ******/
+
+input[type="range"] {
+  -webkit-appearance: none; 
+  outline: none;
+  width: auto;
+  height: 5px;
+  border-radius: 1px;
+  position: relative;
+  background-color: #000;
+  -webkit-background-clip: padding-box;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  cursor: ew-resize;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; 
+  position: relative;
+  z-index: 1;
+  width: 10px;
+  height: 20px;
+  border-radius: 1px / 2px ;
+  
+  background-image: -webkit-gradient( linear, left top, right top,
+    color-stop( 0,    hsl(0,0%,15%) ), 
+    color-stop( .16,  hsl(0,0%,22%) ), 
+    color-stop( .18,  hsl(0,0%,30%) ), 
+    color-stop( .2,   hsl(0,0%,26%) ), 
+    
+    color-stop( .42,  hsl(217,60%,30%) ), 
+    color-stop( .44,  hsl(217,0%,15%) ),
+    color-stop( .46,  hsl(217,100%,50%) ), 
+    color-stop( .54,  hsl(217,100%,50%) ), 
+    color-stop( .56,  hsl(217,0%,15%) ), 
+    color-stop( .58,  hsl(217,60%,30%) ), 
+    
+    color-stop( .8,   hsl(0,0%,26%) ),
+    color-stop( .82,  hsl(0,0%,30%) ), 
+    color-stop( .84,  hsl(0,0%,22%) ), 
+    color-stop( 1,    hsl(0,0%,15%) ) 
+  );
+}

@@ -103,6 +103,7 @@ StartAudioContext(Tone.context, "article").then(function() {
     if (evt.target.className.indexOf("controller-btn") > -1) return;
     if (evt.target.className.indexOf("favorite") > -1) return;
     $(".modal").addClass("is-active");
+    removeActive(".step");
 
     if (loopsPlaying[0] != null) {
       loopsPlaying[0].stop(0.01);
@@ -143,8 +144,16 @@ StartAudioContext(Tone.context, "article").then(function() {
         modalBeat = riff.beat_division;
 
         //set riff name
+        let slider = 3;
         $("#modal-title-input").val(riff.title);
         $(".modal").attr("data-id", riffId)
+        switch (riff.beat_division) {
+          case 2: slider = 1; break;
+          case 4: slider = 2; break;
+          case 8: slider = 3; break;
+          case 16: slider = 4; break;
+        }
+        $(".modal-beat-sel").val(slider);
 
         $.each($(".modal-step"), function(index, value) {
           $(this).text(modalSequence[index]);
@@ -161,6 +170,7 @@ StartAudioContext(Tone.context, "article").then(function() {
   });
 
   function defineLoop(seq, beat) {
+    // modalLoop = {};
     modalStep = 0;
     modalSynth = new Tone.PolySynth(8, Tone.Synth).toMaster();
 
@@ -215,29 +225,30 @@ StartAudioContext(Tone.context, "article").then(function() {
           modalLoop.start(0.01);
         }, 3);
       }
+      $(".modal-beat-sel").prop("disabled", true);
     }  else {
       if (modalLoop.state === "started") {
         modalLoop.stop(0.01);
         Tone.Transport.stop();
         removeActive(".modal-step");
-      } 
+      }
+      $(".modal-beat-sel").prop("disabled", false); 
     } 
   });
 
-  $(".modal-beat-sel").on("click", function() {
-    modalLoop.stop(0.01);
-    Tone.Transport.stop();
-    modalBeat = $(this).data("id");
-    modalLoop = undefined;
+  $(".modal-beat-sel").on("change", function() {
+    switch ($(this).val()) {
+      case "1": modalBeat = 2; break; 
+      case "2": modalBeat = 4; break; 
+      case "3": modalBeat = 8; break; 
+      case "4": modalBeat = 16; break;
+      default: modalBeat = 8; break; 
+    }
     defineLoop(modalSequence, modalBeat);
-    Tone.Transport.start();
-    setTimeout(function() {
-      modalLoop.start(0.01);
-    }, 3);
   });
 
   // Play the sequence that was clicked
-  $(".tile-controller-btn").on("click", function(event) {
+  $(".tile-radio").on("click", function(event) {
     let id = $(this).data("id");
     let index;
 
@@ -353,7 +364,10 @@ function clearModal() {
     " ",
     " "
   ];
-  removeActive('.modal-step');
+  removeActive(".modal-step");
+  $(".percussion-btn").each(function () {
+    $(this).removeClass("picked");  
+  });
 }
 
 function removeActive (el, stepKey='all') {
@@ -560,7 +574,8 @@ function handlePlay(id, index, hitPlay, hitStop) {
     if (ref > -1) {
       loopsPlaying[ref].stop(0.01);
       spliceActiveLoop(ref);
-      removeActive(".step");
+      removeActiveStepTiles(id, seq.length);
+      // removeActive(".step");
     }
   } else {
     if (activeRiffs.length < maxPlaying) {
@@ -572,20 +587,31 @@ function handlePlay(id, index, hitPlay, hitStop) {
     } else {
       if (ref === -1) {
         //stop and remove last playing loop
-        resetRadio(activeRiffs[activeRiffs.length - 1]);
+        let stopRiff = activeRiffs[activeRiffs.length - 1];
+        resetRadio(stopRiff);
         loopsPlaying[activeRiffs.length - 1].stop(0.01);
         popActiveLoop();
-
-        $.each($(".step"), function() {
-          $(this).css("border-color", "black");
-          $(this).css("box-shadow", "0 0 1px 1px rgb(10,10,10)");
-        });
 
         //start clicked loop
         pushActiveLoop(id, seq, beat);
         Tone.Transport.start();
         loopsPlaying[activeRiffs.length - 1].start(0.01);
+
+        //turns off colors
+        removeActiveStepTiles(stopRiff, seq.length);
       }
     }
   }
 }
+
+function removeActiveStepTiles (id, len) {
+  for (let i = 0; i < len - 1; i++) {
+    $(`#step-${id}-${i}`).removeClass("active-step-C");
+    $(`#step-${id}-${i}`).removeClass("active-step-D");
+    $(`#step-${id}-${i}`).removeClass("active-step-E");
+    $(`#step-${id}-${i}`).removeClass("active-step-F");
+    $(`#step-${id}-${i}`).removeClass("active-step-G");
+    $(`#step-${id}-${i}`).removeClass("active-step-A");
+    $(`#step-${id}-${i}`).removeClass("active-step-B"); 
+  }
+};

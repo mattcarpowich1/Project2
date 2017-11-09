@@ -44,7 +44,7 @@ p.subtitle {
   padding-top: 1rem;
 }
 
-button[type="submit"] {
+#submit-button {
   width: 100%;
   font-family: inherit;
   background-color: #333333;
