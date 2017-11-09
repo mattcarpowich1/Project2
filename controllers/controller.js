@@ -151,10 +151,36 @@ router.get("/api/users/:userid", function(req, res) {
           })
         })
       });
-      res.render("pages/index", {
-        riffs: resObj,
-        user: req.user,
-        filter: {type: "user"}
+      console.log('!!!!!!!!!!!!!!!!!!!!!1');
+      console.log(resObj);
+      db.Riffs.findAll({
+        where: {
+          UserId: req.params.userid
+        },
+        include: [
+          {model: db.Users}
+        ],
+        order: [sequelize.col('id')]
+      }).then(function(riffUsers) {
+        const res2Obj = riffUsers.map(riff => {
+          if (riff.User) {
+            return Object.assign({}, {
+              id: riff.id,
+              username: riff.User.dataValues.username
+            });
+          } else {
+            return Object.assign({}, {
+              id: riff.id,
+              username: ""
+            });
+          }
+        });
+        res.render("pages/index", {
+          riffs: resObj,
+          riffUsers: res2Obj,
+          user: req.user,
+          filter: {type: "user"}
+        });
       });
     });
 });
@@ -190,9 +216,33 @@ router.get("/api/users/:userid", function(req, res) {
           })
         })
       });
-      res.render("pages/index", {
-        riffs: resObj,
-        user: req.user
+      db.Riffs.findAll({
+        where: {
+          title: req.query.title 
+        },
+        include: [
+          {model: db.Users}
+        ],
+        order: [sequelize.col('id')]
+      }).then(function(riffUsers) {
+        const res2Obj = riffUsers.map(riff => {
+          if (riff.User) {
+            return Object.assign({}, {
+              id: riff.id,
+              username: riff.User.dataValues.username
+            });
+          } else {
+            return Object.assign({}, {
+              id: riff.id,
+              username: ""
+            });
+          }
+        });
+        res.render("pages/index", {
+          riffs: resObj,
+          riffUsers: res2Obj,
+          user: req.user
+        });
       });
     });
  });
