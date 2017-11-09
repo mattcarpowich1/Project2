@@ -24,13 +24,17 @@ h3.title {
   color: #333333 !important;
 }
 
+.color-icon {
+  clip-path: circle(59px at center);
+}
+
 .avatar div {
+  border-radius: 50%;
   margin: auto;
-  width: 128px;
-  height: 128px;
-  padding: 5px;
+  width: 125px;
+  height: 125px;
+  padding: 2px;
   background: lightgrey;
-  border-radius: 0;
   -webkit-box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
   box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1); 
 }
