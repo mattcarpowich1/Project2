@@ -6,7 +6,7 @@
       data-authored="<% if (riffs[i]) { if (user) { 
         if (user.dataValues.id === riffs[i].UserId) { %>1<% } 
         else { %>0<% } } else { %>0<% } } else { if (user) { %>1<% } else { %>0<% } }%>"
-      data-username="<% if (i != -1) { if (riffs[i]) { %><%= riffUsers[parseInt(riffs[i].id) - 1].username %><% } } %>">
+      data-username="<% if (i != -1) { if (riffs[i]) { if (riffUsers[riffs[i].id-1]) {%><%= riffUsers[parseInt(riffs[i].id)-1].username %><% } } }%>">
       <div class="overlay <% if (i != -1) { %> is-riff <% } %>">
         <div class="overlay-text"> + </div>
       </div>
