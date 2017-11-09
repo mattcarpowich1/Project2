@@ -1,13 +1,21 @@
 <% for (var i = -1; i < riffs.length; i++) { %>
 <div class="column is-mobile is-half-tablet is-one-quarter-desktop">
   <div class="tile is-parent">
-    <article class="tile is-child box tile-riff" data-id="<% if (riffs && i != -1) { %><%= riffs[i].id %><% } %>" data-authored="<% if (riffs[i]) { if (user) { if (user.dataValues.id === riffs[i].UserId) { %>1<% } else { %>0<% } } else { %>0<% } } else { if (user) { %>1<% } else { %>0<% } }%>">
+    <article class="tile is-child box tile-riff" 
+      data-id="<% if (riffs && i != -1) { %><%= riffs[i].id %><% } %>" 
+      data-authored="<% if (riffs[i]) { if (user) { 
+        if (user.dataValues.id === riffs[i].UserId) { %>1<% } 
+        else { %>0<% } } else { %>0<% } } else { if (user) { %>1<% } else { %>0<% } }%>"
+      data-username="<% if (riffs[i]) { %><%= riffUsers[i].username %><% } %>">
       <div class="overlay <% if (i != -1) { %> is-riff <% } %>">
         <div class="overlay-text"> + </div>
       </div>
       <div class="tile-shine">
         <div class="tile-title">
           <div class="status-bar">
+            <div class="riff-user"><% if (riffs[i]) { 
+              if (riffUsers[i].username !== "") { %>@<%= riffUsers[i].username %><% } } %>
+            </div>
             <% if (i != -1) { %>
                 <% if(riffs[i].favorites[i] != undefined && user) { %>
                   <% let foundFavorite = false; %>

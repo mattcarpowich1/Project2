@@ -105,15 +105,10 @@ StartAudioContext(Tone.context, "article").then(function() {
     $(".modal").addClass("is-active");
     removeActive(".step");
 
-    if (loopsPlaying[0] != null) {
-      loopsPlaying[0].stop(0.01);
-      loopsPlaying[0] = null;
+    //stop playing loops
+    if (loopsPlaying.length > 0) {
+      loopsPlaying.forEach((loop) => loop.stop(0.01));
     }
-    if (loopsPlaying[1] != null) {
-      loopsPlaying[1].stop(0.01);
-      loopsPlaying[1] = null;
-    }
-
     //clears out tile loops
     activeRiffs = [];
     loopsPlaying = [];
@@ -124,6 +119,12 @@ StartAudioContext(Tone.context, "article").then(function() {
       $('footer').hide();
     } else {
       $('footer').show();
+    }
+
+    if ($(this).data('username') !== '') {
+      $('.modal-riff-user').html(`@${$(this).data('username')}`);
+    } else {
+      $('.modal-riff-user').empty();
     }
 
     let riffId = $(this).data("id");

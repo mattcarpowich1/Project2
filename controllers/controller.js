@@ -2,6 +2,7 @@ let express = require("express");
 let request = require("request");
 let passport = require("passport");
 let Strategy = require("passport-local").Strategy;
+let sequelize = require('sequelize');
 
 let router = express.Router();
 let db = require("../models");
@@ -17,9 +18,9 @@ let db = require("../models");
  */
 router.get("/", function(req, res) {
   db.Riffs.findAll({
-    include: [{
-      model: db.Favorites
-    }]
+    include: [
+      {model: db.Favorites}
+    ]
   }).then(function(allRiffs) {
     const resObj = allRiffs.map(riff => {
       return Object.assign({}, {
@@ -28,7 +29,6 @@ router.get("/", function(req, res) {
         sequence: riff.sequence,
         tempo: 120,
         beat_division: riff.beat_division,
-        UserId: riff.UserId,
         favorites: riff.Favorites.map(favorite => {
           return Object.assign({}, {
             id: favorite.id,
@@ -37,10 +37,31 @@ router.get("/", function(req, res) {
         })
       })
     });
-    res.render("pages/index", {
-      riffs: resObj,
-      user: req.user,
-      filter: "none"
+    db.Riffs.findAll({
+      include: [
+        {model: db.Users}
+      ],
+      order: [sequelize.col('id')]
+    }).then(function(riffUsers) {
+      const res2Obj = riffUsers.map(riff => {
+        if (riff.User) {
+          return Object.assign({}, {
+            id: riff.id,
+            username: riff.User.dataValues.username
+          });
+        } else {
+          return Object.assign({}, {
+            id: riff.id,
+            username: ""
+          });
+        }
+      });
+      res.render("pages/index", {
+        riffs: resObj,
+        user: req.user,
+        riffUsers: res2Obj,
+        filter: "none"
+      });
     });
   });
 });
@@ -120,7 +141,6 @@ router.get("/api/users/:userid", function(req, res) {
           sequence: riff.sequence,
           tempo: 120,
           beat_division: riff.beat_division,
-          UserId: riff.UserId,
           favorites: riff.Favorites.map(favorite => {
             return Object.assign({}, {
               id: favorite.id,
@@ -159,7 +179,6 @@ router.get("/api/users/:userid", function(req, res) {
           sequence: riff.sequence,
           tempo: 120,
           beat_division: riff.beat_division,
-          UserId: riff.UserId,
           favorites: riff.Favorites.map(favorite => {
             return Object.assign({}, {
               id: favorite.id,
