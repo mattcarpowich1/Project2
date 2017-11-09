@@ -130,7 +130,7 @@ StartAudioContext(Tone.context, "article").then(function() {
     let riffId = $(this).data("id");
     $("#modal-title-input").val("New Riff");
 
-    if (riffId !== "") {
+    if (riffId) {
       let url = "/api/riffs/" + riffId;
       $.ajax({
         url: url,
