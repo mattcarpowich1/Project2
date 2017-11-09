@@ -233,17 +233,17 @@ StartAudioContext(Tone.context, "article").then(function() {
         Tone.Transport.stop();
         removeActive(".modal-step");
       }
-      $(".modal-beat-sel").prop("disabled", false); 
-    } 
+      $(".modal-beat-sel").prop("disabled", false);
+    }
   });
 
   $(".modal-beat-sel").on("change", function() {
     switch ($(this).val()) {
-      case "1": modalBeat = 2; break; 
-      case "2": modalBeat = 4; break; 
-      case "3": modalBeat = 8; break; 
+      case "1": modalBeat = 2; break;
+      case "2": modalBeat = 4; break;
+      case "3": modalBeat = 8; break;
       case "4": modalBeat = 16; break;
-      default: modalBeat = 8; break; 
+      default: modalBeat = 8; break;
     }
     defineLoop(modalSequence, modalBeat);
   });
@@ -367,7 +367,7 @@ function clearModal() {
   ];
   removeActive(".modal-step");
   $(".percussion-btn").each(function () {
-    $(this).removeClass("picked");  
+    $(this).removeClass("picked");
   });
 }
 
@@ -388,16 +388,52 @@ function removeActive (el, stepKey='all') {
 };
 
 $("#publish-riff").on("click", function() {
+// SaamK - Added a variable for riffId and created an if statement that is looking for if the data-id attribute exits. If no it posts a new riff, if yes it updates.
+  var riffId = 0;
+  riffId = $(this).closest(".modal").attr("data-id");
   let sequenceString = JSON.stringify(modalSequence);
   let newRiff = {
     title: $("#modal-title-input").val().trim(),
     sequence: sequenceString,
     beat_division: modalBeat,
   };
+  if(!$(".modal").data("id")){
   $.post("/api/riffs/new", newRiff, function() {
     console.log("THERE");
     window.location.href = "/";
   });
+} else{
+  $.ajax({
+    url: "/update",
+    method: "PUT",
+    data: {
+      data: newRiff,
+      id: riffId
+    },
+    dataType: "json",
+    success: function(result) {
+      window.location.href = "/";
+    }
+  });
+}
+});
+
+//delete riff
+$("#delete").on("click", function () {
+  var riffId = 0;
+    riffId = $(this).closest(".modal").attr("data-id");
+    $(".modal").removeClass("is-active");
+    $.ajax({
+      url: "/delete",
+      method: "DELETE",
+      data: {
+        id: riffId
+      },
+      dataType: "json",
+      success: function(result) {
+        location.reload();
+      }
+    });
 });
 
 
@@ -613,6 +649,6 @@ function removeActiveStepTiles (id, len) {
     $(`#step-${id}-${i}`).removeClass("active-step-F");
     $(`#step-${id}-${i}`).removeClass("active-step-G");
     $(`#step-${id}-${i}`).removeClass("active-step-A");
-    $(`#step-${id}-${i}`).removeClass("active-step-B"); 
+    $(`#step-${id}-${i}`).removeClass("active-step-B");
   }
 };
