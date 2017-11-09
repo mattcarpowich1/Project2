@@ -1,7 +1,7 @@
 <% for (var i = -1; i < riffs.length; i++) { %>
 <div class="column is-mobile is-half-tablet is-one-quarter-desktop">
   <div class="tile is-parent">
-    <article class="tile is-child box tile-riff" data-id="<% if (riffs && i != -1) { %><%= riffs[i].id %><% } %>" data-authored="<% if (!user) { %>0<% } else { if (riffs[i]) { if (user.id === riffs[i].UserId) { %>1<% } else { %>0<% } } else { %>1<% } }%>">
+    <article class="tile is-child box tile-riff" data-id="<% if (riffs && i != -1) { %><%= riffs[i].id %><% } %>" data-authored="<% if (riffs[i]) { if (user) { if (user.dataValues.id === riffs[i].UserId) { %>1<% } else { %>0<% } } else { %>0<% } } else { if (user) { %>1<% } else { %>0<% } }%>">
       <div class="overlay <% if (i != -1) { %> is-riff <% } %>">
         <div class="overlay-text"> + </div>
       </div>
