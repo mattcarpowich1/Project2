@@ -39,7 +39,6 @@ router.get("/", function(req, res) {
         })
       })
     });
-    console.log(resObj);
     db.Riffs.findAll({
       include: [
         {model: db.Users}
@@ -145,6 +144,7 @@ router.get("/api/users/:userid", function(req, res) {
           tempo: 120,
           beat_division: riff.beat_division,
           UserId: riff.UserId,
+          display: riff.display,
           favorites: riff.Favorites.map(favorite => {
             return Object.assign({}, {
               id: favorite.id,
@@ -210,6 +210,7 @@ router.get("/api/users/:userid", function(req, res) {
             tempo: 120,
             beat_division: riff.beat_division,
             UserId: riff.UserId,
+            display: riff.display,
             favorites: riff.Favorites.map(favorite => {
               return Object.assign({}, {
                 id: favorite.id,
