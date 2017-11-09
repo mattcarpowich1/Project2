@@ -189,60 +189,64 @@ router.get("/api/users/:userid", function(req, res) {
  * @param  {[type]} res [HTTP Response, renders index.ejs]
  */
  router.get('/search/', function(req, res) {
-  db.Riffs
-    .findAll({
-      where: {
-        title: req.query.title
-      },
-      include: [{
-        model: db.Favorites
-      }]
-    }).then(function(allRiffs) {
-      const resObj = allRiffs.map(riff => {
-        return Object.assign({}, {
-          id: riff.id,
-          title: riff.title,
-          sequence: riff.sequence,
-          tempo: 120,
-          beat_division: riff.beat_division,
-          UserId: riff.UserId,
-          favorites: riff.Favorites.map(favorite => {
-            return Object.assign({}, {
-              id: favorite.id,
-              user_id: favorite.UserId,
-            })
-          })
-        })
-      });
-      db.Riffs.findAll({
+  if (!req.query.title) {
+    res.redirect('/');
+  } else {
+    db.Riffs
+      .findAll({
         where: {
           title: req.query.title
         },
-        include: [
-          {model: db.Users}
-        ],
-        order: [sequelize.col('id')]
-      }).then(function(riffUsers) {
-        const res2Obj = riffUsers.map(riff => {
-          if (riff.User) {
-            return Object.assign({}, {
-              id: riff.id,
-              username: riff.User.dataValues.username
-            });
-          } else {
-            return Object.assign({}, {
-              id: riff.id,
-              username: ""
-            });
-          }
+        include: [{
+          model: db.Favorites
+        }]
+      }).then(function(allRiffs) {
+        const resObj = allRiffs.map(riff => {
+          return Object.assign({}, {
+            id: riff.id,
+            title: riff.title,
+            sequence: riff.sequence,
+            tempo: 120,
+            beat_division: riff.beat_division,
+            UserId: riff.UserId,
+            favorites: riff.Favorites.map(favorite => {
+              return Object.assign({}, {
+                id: favorite.id,
+                user_id: favorite.UserId,
+              })
+            })
+          })
         });
-        res.render("pages/index", {
-          riffs: resObj,
-          riffUsers: res2Obj,
-          user: req.user
+        db.Riffs.findAll({
+          where: {
+            title: req.query.title
+          },
+          include: [
+            {model: db.Users}
+          ],
+          order: [sequelize.col('id')]
+        }).then(function(riffUsers) {
+          const res2Obj = riffUsers.map(riff => {
+            if (riff.User) {
+              return Object.assign({}, {
+                id: riff.id,
+                username: riff.User.dataValues.username
+              });
+            } else {
+              return Object.assign({}, {
+                id: riff.id,
+                username: ""
+              });
+            }
+          });
+          res.render("pages/index", {
+            riffs: resObj,
+            riffUsers: res2Obj,
+            user: req.user
+          });
         });
       });
-    });
+    }
  });
 
 // =======================================
