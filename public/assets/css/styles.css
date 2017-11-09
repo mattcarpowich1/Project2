@@ -132,6 +132,12 @@ article {
   box-shadow: 4px 10px 6px grey; 
 }
 
+.riff-user {
+  color: hsl(0,0%,90%);
+  align-self: flex-start;
+  font-size: 14px;
+}
+
 .overlay {
   position: absolute;
   top: 0;
@@ -168,7 +174,7 @@ article {
 
 .status-bar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   height: 20px;
   margin: 0px -5px 5px 0px;
 }
@@ -271,10 +277,15 @@ article {
 
 .modal-card-head {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   background-color: hsla(0,0%,0%,0);
   border: none;
+  padding-bottom: 0px;
+}
+
+.modal-riff-user {
+  padding-left: 10px;
 }
 
 .modal-card-body {
