@@ -130,7 +130,7 @@ StartAudioContext(Tone.context, "article").then(function() {
     let riffId = $(this).data("id");
     $("#modal-title-input").val("New Riff");
 
-    if (riffId !== "") {
+    if (riffId) {
       let url = "/api/riffs/" + riffId;
       $.ajax({
         url: url,
@@ -335,6 +335,7 @@ StartAudioContext(Tone.context, "article").then(function() {
 
 //clear step when modal closes
 function clearModal() {
+  $(".modal").removeAttr("data-id");
   $(".modal-step").each(function() {
     kickActive = false;
     snareActive = false;
@@ -425,7 +426,7 @@ $("#delete").on("click", function () {
     $(".modal").removeClass("is-active");
     $.ajax({
       url: "/delete",
-      method: "DELETE",
+      method: "PUT",
       data: {
         id: riffId
       },

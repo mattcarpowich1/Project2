@@ -30,6 +30,7 @@ router.get("/", function(req, res) {
         tempo: 120,
         beat_division: riff.beat_division,
         UserId: riff.UserId,
+        display: riff.display,
         favorites: riff.Favorites.map(favorite => {
           return Object.assign({}, {
             id: favorite.id,
@@ -38,6 +39,7 @@ router.get("/", function(req, res) {
         })
       })
     });
+    console.log(resObj);
     db.Riffs.findAll({
       include: [
         {model: db.Users}
@@ -262,6 +264,7 @@ router.post("/api/riffs/new", function(req, res) {
     beat_division: parseInt(req.body.beat_division),
     num_favorites: 0,
     play_count: 0,
+    display: true,
     UserId: req.user.dataValues.id
   }
   db.Riffs.create(riffObj).then(function(newRiff) {
@@ -295,14 +298,17 @@ router.post("/remove_favorite", require("connect-ensure-login").ensureLoggedIn()
 // =======================================
 //             DELETE ROUTES
 // =======================================
-router.delete("/delete", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
-  db.Riffs.destroy({
+router.put("/delete", require("connect-ensure-login").ensureLoggedIn(), function(req, res) {
+  let riff = req.body.data;
+  db.Riffs.update({
+    display: false
+  }, {
     where: {
       id: req.body.id
     }
   }).then(function() {
     res.json({"complete" : "true"});
-    console.log('updateeeeeeeeeeeee!');
+    console.log('Display False!');
   });
 })
 
@@ -321,7 +327,6 @@ router.put("/update", require("connect-ensure-login").ensureLoggedIn(), function
     }
   }).then(function() {
     res.json({"complete" : "true"});
-    console.log('deleteeeeeeeeeeeeeeeeeeeeee!');
   });
 })
 
