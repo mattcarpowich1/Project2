@@ -1,5 +1,4 @@
-<% for (var i = -1; i < riffs.length; i++) { %>
-<% let idNum = -1; if (riffs && i != -1) idNum = parseInt(riffs[i].id) - 1; %>
+<% for (let i = -1; i < riffs.length; i++) { %>
 <div class="column is-mobile is-half-tablet is-one-quarter-desktop">
   <div class="tile is-parent">
     <article class="tile is-child box tile-riff" 
@@ -7,7 +6,7 @@
       data-authored="<% if (riffs[i]) { if (user) { 
         if (user.dataValues.id === riffs[i].UserId) { %>1<% } 
         else { %>0<% } } else { %>0<% } } else { if (user) { %>1<% } else { %>0<% } }%>"
-      data-username="<% if (i != -1) { if (riffs[i]) { %><%= riffUsers[idNum].username %><% } } %>">
+      data-username="<% if (i != -1) { if (riffs[i]) { %><%= riffUsers[parseInt(riffs[i].id) - 1].username %><% } } %>">
       <div class="overlay <% if (i != -1) { %> is-riff <% } %>">
         <div class="overlay-text"> + </div>
       </div>
@@ -15,21 +14,23 @@
         <div class="tile-title">
           <div class="status-bar">
             <div class="riff-user"><% if (riffs[i]) {
-              if (riffUsers[idNum].username !== "") { %>@<%= riffUsers[idNum].username %><% } } %>
+              if (riffUsers[parseInt(riffs[i].id) - 1].username !== "") { %>@<%= riffUsers[parseInt(riffs[i].id) - 1].username %><% } } %>
             </div>
-            <% let iEl; %>
             <% if (i != -1 && user) { %>
-              <% iEl = `fa-star-o`; %>
               <% if(riffs[i].favorites != undefined) { %>
+                <% let favorited = false; %>
                 <% for (let j = 0; j < riffs[i].favorites.length; j++) { %>
                   <% if (riffs[i].favorites[j].user_id == user.id) { %>
-                    <% iEl = `fa-star`; %>
+                    <i class="fa fa-star favorite" id="favorite" aria-hidden="true"></i>
+                    <% favorited = true; %>
                     <% break; %>
                   <% } %>
                 <% } %>
+                <% if (!favorited) { %>
+                  <i class="fa fa-star-o favorite" id="favorite" aria-hidden="true"></i>
+                <% } %>
               <% } %>
             <% } %>
-            <i class="fa <%= iEl %> favorite" id="favorite" aria-hidden="true"></i>
           </div>
           <p class="riff-title">
             <% if (i != -1) { %> <%= riffs[i].title %> <% } else { %> New Riff <% } %>

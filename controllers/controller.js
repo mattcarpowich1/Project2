@@ -57,8 +57,6 @@ router.get("/", function(req, res) {
           });
         }
       });
-      console.log(resObj);
-      console.log(res2Obj);
       res.render("pages/index", {
         riffs: resObj,
         user: req.user,
