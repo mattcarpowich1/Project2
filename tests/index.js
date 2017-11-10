@@ -36,15 +36,11 @@ nightmare2
 	.wait('#navbar-logo')
 	.click('#navbar-logo')
 	.wait('article')
-	.click('article:nth-child(1)')
+	.click('article')
 	.wait('#modal-title-input')
 	.type('#modal-title-input', 'Test Riff')
-	.click('#publish-riff')
-	.wait('section')
-	.click('.tile')
-	.wait('#modal-title-input')
 	.evaluate(() => {
-		return document.getElementById('modal-title-input');
+		return document.getElementById('modal-title-input').value;
 	})
 	.end()
 	.then(text => {
