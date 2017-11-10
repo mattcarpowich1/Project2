@@ -39,5 +39,8 @@
     "passport-local": "^1.0.0",
     "request": "^2.83.0",
     "sequelize": "^4.19.0"
+  },
+  "devDependencies": {
+    "nightmare": "^2.10.0"
   }
 }
