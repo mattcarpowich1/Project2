@@ -153,7 +153,6 @@ router.get("/api/users/:userid", function(req, res) {
           })
         })
       });
-      console.log(resObj);
       db.Riffs.findAll({
         include: [
           {model: db.Users}
@@ -173,7 +172,6 @@ router.get("/api/users/:userid", function(req, res) {
             });
           }
         });
-        console.log(res2Obj);
         res.render("pages/index", {
           riffs: resObj,
           riffUsers: res2Obj,
