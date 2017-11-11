@@ -40,7 +40,7 @@ app.use("/", routes);
 
 db.sequelize
   .sync({
-    force: true
+    force: false
   })
   .then(function() {
     app.listen(PORT, function() {
