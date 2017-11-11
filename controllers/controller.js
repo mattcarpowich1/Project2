@@ -20,7 +20,7 @@ router.get("/", function(req, res) {
   db.Riffs.findAll({
     include: [
       {model: db.Favorites}
-    ]
+    ], order: [sequelize.col('id')]
   }).then(function(allRiffs) {
     const resObj = allRiffs.map(riff => {
       return Object.assign({}, {
@@ -134,7 +134,8 @@ router.get("/api/users/:userid", function(req, res) {
       },
       include: [{
         model: db.Favorites
-      }]
+      }], 
+      order: [sequelize.col('id')]
     }).then(function(allRiffs) {
       const resObj = allRiffs.map(riff => {
         return Object.assign({}, {
@@ -198,7 +199,8 @@ router.get("/api/users/:userid", function(req, res) {
         },
         include: [{
           model: db.Favorites
-        }]
+        }],
+        order: [sequelize.col('id')]
       }).then(function(allRiffs) {
         const resObj = allRiffs.map(riff => {
           return Object.assign({}, {
