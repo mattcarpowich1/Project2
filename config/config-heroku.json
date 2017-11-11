@@ -24,3 +24,27 @@
     "use_env_variable": "mysql://ejzjit48eh1pjued:h7sku1gsk5jk9q0j@yhrz9vns005e0734.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/vent2uz8ptgdx5eo"
   }
 }
+
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "sequencer_db",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "",
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "",
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

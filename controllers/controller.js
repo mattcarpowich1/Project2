@@ -134,7 +134,7 @@ router.get("/api/users/:userid", function(req, res) {
       },
       include: [{
         model: db.Favorites
-      }], 
+      }],
       order: [sequelize.col('id')]
     }).then(function(allRiffs) {
       const resObj = allRiffs.map(riff => {
@@ -279,7 +279,6 @@ router.post("/add_favorite", require("connect-ensure-login").ensureLoggedIn(), f
     UserId: req.user.dataValues.id
   }
   db.Favorites.create(newFavorite).then(function(result) {
-    console.log("Added Favorite");
   }).then(function() {
     res.json({"complete" : "true"});
   });
@@ -309,7 +308,6 @@ router.put("/delete", require("connect-ensure-login").ensureLoggedIn(), function
     }
   }).then(function() {
     res.json({"complete" : "true"});
-    console.log('Display False!');
   });
 })
 
