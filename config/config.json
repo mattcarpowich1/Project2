@@ -1,0 +1,6 @@
+
+{
+  "production": {
+    "use_env_variable": "true"
+  }
+}
