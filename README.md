@@ -1,2 +1,4 @@
 # Project2
-UC Berkeley Coding Bootcamp Project 2 - Full Stack Application
+Full Stack Music Sequencer Application 
+
+riffster.io
